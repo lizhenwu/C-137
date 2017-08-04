@@ -44,6 +44,10 @@
     }
 </script>
 <style scoped>
+    .mdui-container-fluid{
+        background:url('../img/girl.jpg') no-repeat center;
+        background-size: contain;
+    }
     #on{
         
         float:right;
