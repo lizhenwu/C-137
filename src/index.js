@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 // function component(){
 //     var element = document.createElement('div');
 //     element.innerHTML = _.join(['hello','webpack'],' ');
@@ -11,10 +12,8 @@ import Vue from 'vue';
 // document.body.appendChild(component());
 // import '../lib/css/mdui.min.css';
 import './lib/js/mdui.min.js';
-
-
 import App from './components/App.vue';
-
+Vue.use(VueRouter);
 var app = new Vue({
   el: '#app',
   template:'<App></App>',
