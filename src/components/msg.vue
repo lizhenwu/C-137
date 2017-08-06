@@ -13,12 +13,14 @@
         </li>
         </ul>
     </div>
+    <div class="mdui-card">
     <div class="mdui-textfield">
         <label class="mdui-textfield-label">Messages</label>
-        <textarea class="mdui-textfield-input  mdui-shadow-1" type="text" v-model="msg"></textarea>
-        <button class="mdui-btn mdui-ripple mdui-btn-icon mdui-fab-mini" @click="sendMsg()"><i class="mdui-icon material-icons">send</i></button>
+        <textarea class="mdui-textfield-input" type="text" v-model="msg"></textarea>
     </div>
-    </div>    
+        <button class="mdui-btn mdui-btn-icon mdui-color-pink" @click="sendMsg()"><i class="mdui-icon material-icons">send</i></button>   
+    </div>
+    </div>
 </template>
 <script>
     export default {
@@ -28,13 +30,17 @@
                 user:this.sock,
                 msgArr:[],
                 msg:"",
-                active:false
+                msgBox:''
             }
         },
         methods:{
+            scroll:function(){
+                this.msgBox.scrollTop+=56;
+            },
             sendMsg: function(){
                 let data = {userName:this.user.name,content:this.msg};
                 this.msgArr.push(data);
+                this.scroll();
                 this.user.emit('send',data);
                 this.msg="";
             }
@@ -43,16 +49,23 @@
             let vm = this;
             vm.user.on('text',function(msg){
                 vm.msgArr.push(msg);
+                this.scroll();
                 if(msg.userName!=vm.user.name){
-                    vm.active=true;
                 }
             });
+        },
+        mounted(){
+            this.msgBox=document.querySelector('.mdui-card');
         }
     }
 </script>
 <style scoped>
     .mdui-card{
-        overflow:scroll;
+        background-color:rgba(255,255,255,0.7);
+        overflow:auto;
+        margin-bottom:1em;
+    }
+    .mdui-card:nth-of-type(1){
         height:70vh;
     }
     .msg{
@@ -94,8 +107,16 @@
     button{
         display:inline
     }
+    .mdui-textfield{
+        display:inline;
+        padding: 0 0;
+    }
     .mdui-textfield-input{
+        height:24px;
+        min-height:20px;
+        max-height:40px;
+        padding:0 0 0 0;
         display:inline-block;
-        width:88%
+        width:88%;
     }
 </style>
