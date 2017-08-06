@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import router from './router';
+import axios from 'axios';
 // function component(){
 //     var element = document.createElement('div');
 //     element.innerHTML = _.join(['hello','webpack'],' ');
@@ -13,9 +14,10 @@ import VueRouter from 'vue-router';
 // import '../lib/css/mdui.min.css';
 import './lib/js/mdui.min.js';
 import App from './components/App.vue';
-Vue.use(VueRouter);
+Vue.prototype.$axios = axios;
 var app = new Vue({
   el: '#app',
+  router,
   template:'<App></App>',
   components:{App}
 

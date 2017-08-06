@@ -1,5 +1,8 @@
 const koa = require('koa');
 const path = require('path');
+const bodyParser = require('koa-bodyparser');
+const router = require('koa-router')();
+const mongo = require('koa-mongo');
 import webpack from 'webpack';
 import {devMiddleware} from 'koa-webpack-middleware';
 import devConfig from './webpack.config.js';
@@ -12,6 +15,8 @@ const server = require('http').createServer(app.callback());
 const io = require('socket.io')(server);
 const staticPath = path.resolve(__dirname,'dist');
 // app.use(staticMid(staticPath));
+app.use(bodyParser());
+app.use(mongo());
 app.use(devMiddleware(compile,{
     publicPath:'/',
     stats:{
@@ -29,7 +34,7 @@ function readFile(path){
         })
     })
 }
-app.use(async(ctx)=>{
+router.get('/',async(ctx)=>{
     // let html = await readFile(path.join(__dirname,'dist/index.html'));
     ctx.body = `<!DOCTYPE html>
 <html lang="en">
@@ -49,6 +54,33 @@ app.use(async(ctx)=>{
 </html>`;
     // console.log(html);
   });
+function login(ctx,info){
+    return new Promise((resolve,reject)=>{
+        let user = ctx.mongo.db('test').collection('users').findOne({name:info.name});
+        user.then((value)=>{
+            if(value){
+                console.log(value);
+                resolve('user exist');
+            }else{
+                ctx.mongo.db('test').collection('users').insert(info).then(()=>{
+                    resolve('sucess to signup');
+                });
+            };
+        })
+    })
+}
+router.post('/user',async(ctx,next)=>{
+    let userInfo = JSON.parse(ctx.request.rawBody);
+    let feedBack = await login(ctx,userInfo);
+
+    // let feedBack = await ctx.mongo.db('test').collection('users').find({name:userInfo.name});
+    ctx.response.status = 200;
+    ctx.response.body = feedBack;
+    console.log(ctx.request.path,feedBack);
+})
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
 const users=[];
 
 io.on('connection',(socket)=>{
@@ -81,7 +113,7 @@ io.on('connection',(socket)=>{
        });
     });
     socket.emit('notice','on');
-    // console.log(socket.id);
+    console.log(socket.id);
     
 })
 
