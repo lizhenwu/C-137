@@ -69,10 +69,31 @@ function login(ctx,info){
         })
     })
 }
-router.post('/user',async(ctx,next)=>{
+router.post('/login',async(ctx,next)=>{
     let userInfo = JSON.parse(ctx.request.rawBody);
+    if(ctx.cookies.get('name')){
+        ctx.response.status = 200;
+        ctx.response.body = "error1";
+    }else{
+        ctx.cookies.set('name',userInfo.name,{maxAge:1000*60,secure:false});
+        ctx.response.status = 200;
+        ctx.response.body = "yes";
+    }
+})
+router.get('/user',async(ctx,next)=>{
+    if(ctx.cookies.get('name')){
+        ctx.response.status = 200;
+        ctx.response.body = "online";
+    }else{
+        ctx.response.status = 200;
+    }
+})
+router.post('/signup',async(ctx,next)=>{
+    let userInfo = JSON.parse(ctx.request.rawBody);
+    console.log(ctx.cookies.get("name"));
+    ctx.cookies.set("name",userInfo.name,{maxAge:1000*60,secure:false});
     let feedBack = await login(ctx,userInfo);
-
+    // ctx.cookies.set("username",userInfo.name,{maxAge:1000*60*60*2,secure:false});
     // let feedBack = await ctx.mongo.db('test').collection('users').find({name:userInfo.name});
     ctx.response.status = 200;
     ctx.response.body = feedBack;
@@ -84,7 +105,6 @@ app
 const users=[];
 
 io.on('connection',(socket)=>{
-    console.log(socket.name)
     socket.on('namein',(name)=>{
         socket.name = name;
         users.push({name:name});
@@ -112,9 +132,7 @@ io.on('connection',(socket)=>{
         // console.log(users);
        });
     });
-    socket.emit('notice','on');
-    console.log(socket.id);
-    
+    socket.emit('notice','on');    
 })
 
 server.listen(3000,()=>{

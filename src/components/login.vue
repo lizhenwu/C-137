@@ -32,7 +32,7 @@ export default {
             let vm = this;
             vm.$axios({
                 method:'post',
-                url:'/user',
+                url:'/signup',
                 headers:{
                    'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'
                 },
@@ -53,9 +53,33 @@ export default {
             })
         },
         login:function(){
-
+            let vm = this;
+            vm.$axios({
+                method:"post",
+                url:'/login',
+                headers:{
+                   'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'
+                },
+                data:{
+                    name:this.userName,
+                    password:this.passWord
+                }
+            }).then(function(response){
+                if(response.status ==200 && response.data=="yes")
+                vm.$router.push({path:"chat"});
+                else if(response.status ==200 && response.data=="error1")
+                    console.log('please sign up first');
+                    else console.log('wrong password');
+            }).catch(function(err){
+                  console.log(err);
+            })
         }
     }
 }
 </script>
+<style scoped>
+
+</style>
+
+
 
