@@ -7,19 +7,7 @@
 </template>
 <script>
 export default {
-    beforeCreate(){
-      let vm = this;
-      vm.$axios.get('/user').then(function(response){
-        if(response.data == "online"){
-          console.log('cookie存在用户');
-          vm.$router.push({path:'chat'});
-        }else{
-          console.log('可以登陆');
-        }
-      }).catch(function(err){
-          console.log(err);
-      })
-    }
+
 }
 </script>
 <style>
