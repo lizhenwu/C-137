@@ -1,39 +1,24 @@
 import Vue from 'vue';
-import router from './router';
+import {Router, router} from './router';
 import axios from 'axios';
-// function component(){
-//     var element = document.createElement('div');
-//     element.innerHTML = _.join(['hello','webpack'],' ');
-//     element.classList.add('hello');
-//     var myIcon = new Image();
-//     myIcon.src = icon;
-//     element.appendChild(myIcon);
-//     return element;
-// }
-// document.body.appendChild(component());
-// import '../lib/css/mdui.min.css';
-import './lib/js/mdui.min.js';
 import App from './components/App.vue';
+import './style.less';
+import store from './store/store';
+import renderNotice from './components/Notification/index';
+import renderMessage from './components/Message/index';
+import timeFormat from './utils/timeFormat';
+
+Vue.use(Router);
 Vue.prototype.$axios = axios;
+Vue.prototype.$notify = renderNotice;
+Vue.prototype.$message = renderMessage;
+Vue.prototype.$timeFormat = timeFormat();
+
 var app = new Vue({
   el: '#app',
   router,
-  template:'<App></App>',
-  components:{App}
-
-  
+  store,
+  render: h => {
+    return h(App)
+  }
 })
-
-
-// Vue.component(appBar.name,appBar)
-
-
-
-// const Vue = require('vue');
-
-// const app=new Vue({
-//     el:'#app',
-//     data:{
-//         message:'Hello Vue.js'
-//     }
-// })

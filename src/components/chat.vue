@@ -1,58 +1,174 @@
 <template>
-    <div class="mdui-container-fluid">
-    <div class="mdui-row">
-        <div class="mdui-appbar">
-            <div class="mdui-toolbar mdui-color-theme">
-                <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
-                <a href="javascript:;" class="mdui-typo-headline">chatX</a>
-                <a href="javascript:;" class="mdui-typo-title">windmill_</a>
-                <div class="mdui-toolbar-spacer"></div>
-                <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
-                <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
-                <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>
+    <main>
+        <!-- <room-list></room-list> -->
+        <div class="blur-container" :class="{'blur': isSettingsShown}">
+        <side-bar v-on:roomPage="toggleRoomPage" v-on:showSettings = toggleSettings v-on:showSystemSettings = toggleSysSets>
+        </side-bar>
+        <div class="main-container">
+            <tool-bar :room-title="insideRoom ? roomData.name : 'Welcome'" :notice="insideRoom ? roomData.notice : ''" v-on:showOnline="toggleOnline"></tool-bar>
+            <div class="content">
+                <msg v-if="insideRoom"></msg>
+                <div class="home" v-else>
+                    <loading v-if="loadingPosition === 'content'"></loading>
+                    <span v-else>选择一个房间开始聊天吧!</span>
+                </div>
+                <!-- 在线用户信息 -->
+                <online v-show="isOnlineShown"></online>
             </div>
         </div>
         </div>
-        <div class="mdui-row">
-        <div class="mdui-col-xs-6">
-        <msg :sock="socket"></msg>
-        </div>
-        <online id="on" :sock="socket"></online>
-        </div>
-    </div>
+        <transition name="dialog">
+        <my-dialog v-show="isSettingsShown">
+            <header slot="header">
+                <span>{{dialogTitle}}</span>
+                <i class="iconfont icon-guanbi" @click="toggleSettings"></i>
+            </header>
+            <component v-bind:is="currentView"></component>
+        </my-dialog>
+        </transition>
+    </main>
 </template>
 <script>
-    import io from 'socket.io-client';
+    import loading from './loading';
+    import roomSets from './roomSets'; 
+    import systemSets from './systemSets';
+    import sideBar from './sideBar';
+    import userSets from './userSets';
+    import myDialog from './dialog';
+    import roomList from './roomList.vue';
     import online from './online.vue';
+    import toolBar from './toolBar';
     import msg from './msg.vue';
+    import { mapActions, mapState, mapGetters } from "vuex";
     export default {
         data:function(){
-            const socket = io({autoConnect: false});
-            socket.name="guest"+Math.round(100*Math.random());
             return {
-                socket:socket,
-                counter: 0
+                counter: 0,
+                move:false,
+                isOnlineShown: true,
+                isSettingsShown: false,
+                dialogTitle: '',
+                currentView: ''
             }
         },
-          
-        created(){
-            //  console.log(this.$attrs);
-
-            
+        computed: {
+            ...mapState([
+                'socket',
+                'onlineUsers',
+                'insideRoom',
+                'loadingPosition'
+            ]),
+            ...mapGetters([
+                'roomData'
+            ])
         },
-        components:{online,msg}
+        methods:{
+            toggleOnline() {
+                this.isOnlineShown = !this.isOnlineShown;
+            },
+            toggleRoomPage() {
+                this.isSettingsShown = !this.isSettingsShown;
+                this.currentView = this.isSettingsShown ? 'roomSets' : '';
+                this.dialogTitle = this.isSettingsShown ? '创建群组' : '';
+            },
+            toggleSettings() {
+                this.isSettingsShown = !this.isSettingsShown;
+                this.currentView = this.isSettingsShown ? 'userSets' : '';
+                this.dialogTitle = this.isSettingsShown ? '个人设置' : '';
+            },
+            toggleSysSets() {
+                this.isSettingsShown = !this.isSettingsShown;
+                this.currentView = this.isSettingsShown ? 'systemSets' : '';
+                this.dialogTitle = this.isSettingsShown ? '系统设置' : '';
+            },
+            logout:function(){
+                let vm = this;
+                vm.$axios({
+                    method:'get',
+                    url:'/api/logout',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.token}` // 必须加前面的Bearer
+                    }
+                }).then(function(response){
+                    if (response.status == 200 && response.data == "log out success") {
+                        console.log('logout')
+                        vm.$router.push({path:'/'})
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            },
+            ...mapActions([
+                'socketInit'
+            ])
+        },
+        created() {
+            // 初始化socket, 但还未加入任何房间
+            this.socketInit();
+        },
+        components:{roomList, online, msg, toolBar, myDialog, userSets, sideBar, systemSets, roomSets, loading}
     }
 </script>
-<style scoped>
-    .mdui-container-fluid{
-        background:url('../img/girl.jpg') no-repeat center;
-        background-size: contain;
+<style lang="less" scoped>
+    main{
+        height: calc(~"100% - 40px");
+        width: 1200px;
+        margin: 0 auto;
+        margin-top: 15px;
+        position: relative;
+        .blur-container{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.6);
+        }
     }
-    #on{
-        
-        float:right;
+    .blur-container.blur{
+        margin: -10px -10xp -10px -10px;
+        pointer-events: none;
+        animation: goblur .2s cubic-bezier(.43,.9,.75,1.01) 1;
+        animation-fill-mode: forwards;
     }
-    .mdui-appbar{
-        margin-bottom:2em;
+    .dialog-enter, .dialog-leave-to{
+        transform: scale(1.1);
+        opacity: 0;
+    }
+    .dialog-enter-active, .dialog-leave-active{
+        transition: all .2s cubic-bezier(.43,.9,.75,1.01);
+    }
+    .main-container{
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        .content{
+            display: flex;
+            flex: 1 1 auto; 
+            margin-top: 1px;
+        }
+    }
+    .home{
+        display: flex;
+        background: #434140;
+        color: #737f8d;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+    }
+    @media screen and (max-width: 1320px) {
+        main{
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    }
+    @keyframes goblur{
+        from{
+            // filter: none;
+            // box-shadow: 0 2px 12px 0 rgba(0,0,0,.6);
+        }
+        to{
+            filter: blur(3px);
+            box-shadow: none;
+        }
     }
 </style>
