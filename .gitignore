@@ -2,3 +2,8 @@
 node_modules/
 dist/
 npm-debug.log
+.vscode/
+server/NOTE.md
+server/mock.js
+server/README.md
+server/test.js
