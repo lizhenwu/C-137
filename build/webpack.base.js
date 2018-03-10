@@ -9,7 +9,6 @@ const sourcePath = path.join(__dirname, '../src');
 
 const isDev = !!(process.env.NODE_ENV != 'production');
 
-
 const cssLoaders = [{
         loader: 'css-loader', 
         options: {
@@ -32,6 +31,7 @@ const cssLoaders = [{
     }]
 
 // 构建生产环境版本时提取css为单独文件 
+// ExtractTextPlugin好像有一个disabale选项用来决定dev和prod环境下是否启用
 const finalCssLoader = ExtractTextPlugin.extract({
     fallback: "style-loader",
     use: cssLoaders
