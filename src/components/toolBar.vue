@@ -8,7 +8,7 @@
         <i class="iconfont" title="todo">&#xe627;</i>
         <i v-on:click="changeDisplay" class="iconfont" title="收起/显示群组列表">&#xe746;</i>
         <span>
-            <input type="text" placeholder="search" title="查找成员todo">
+            <input type="text" placeholder="Search" title="查找成员todo">
             <i class="iconfont">&#xe632;</i>
         </span>
         <i class="iconfont" title="群组信息todo">&#xe64c;</i>
@@ -64,6 +64,7 @@ header{
         align-items: center;
         span{
             position: relative;
+            margin: 0 5px;
         }
         input{
             outline: none;

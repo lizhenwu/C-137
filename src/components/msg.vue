@@ -21,7 +21,7 @@
         <div class="input-box">
             <div class="input-wrapper">
             <i class="iconfont" title="发送文件todo">&#xe64d;</i>
-            <textarea ref="textarea" rows="1" type="text" v-model="msg" placeholder="New Message" @keyup.enter="sendMsg(msg)"></textarea>
+            <textarea ref="textarea" rows="1" type="text" v-model="msg" placeholder="#New Message" @keyup.enter="sendMsg(msg)"></textarea>
             <i @click="sendMsg(msg)" class="iconfont btn-send" title="发送">&#xe60c;</i>
             </div>
         </div>
@@ -77,6 +77,11 @@
                 // textarea自适应高度
                 this.$refs.textarea.style.height = this.height;
                 if(this.$refs.textarea.scrollHeight > parseFloat(this.height)) {
+                    // 这段if代码解决当点发送之后清空输入框但高度没有变到原始高度
+                    if(this.msg === '') {
+                        this.$refs.textarea.style.height = this.height;
+                        return;
+                    }
                     this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + 'px'
                 }
             }

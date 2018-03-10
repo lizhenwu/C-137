@@ -1,7 +1,7 @@
 <template>
   <div class="side-bar">
             <header class="header" @click.stop="showMenu">
-                <span>chatX</span>
+                <span>C-137</span>
                 <i class="iconfont icon-jiantouxia" title="菜单"></i>
             </header>
             <transition name="menu">
