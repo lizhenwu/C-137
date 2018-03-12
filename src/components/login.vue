@@ -74,18 +74,18 @@ export default {
             }
           })
           .then(function(response) {
-            if (response.status == 200) {
+            if (response.status === 200) {
               localStorage.token = response.headers.authorization;
               localStorage.user = response.data;
               vm.$store.commit("login");
               vm.$router.push({ path: `/${response.data}` });
             } else {
-              this.$message({type: 'info', message: "登录失败" });
+              vm.$message({type: 'info', message: "登录失败" });
             }
           })
           .catch(function(err) {
             if (err.response.status === 401) {
-              this.$message({type: 'info', message: err.response.data})
+              vm.$message({type: 'info', message: err.response.data})
             }
           });
       } else {
@@ -121,10 +121,6 @@ export default {
 @import url('../var.less');
 .login-box{
     background: #fff;
-    h2{
-        width: inherit;
-        font-family: "Lucida Grande";
-    }
     margin: auto;
     margin-top: 10%;
     width: 90%;

@@ -36,7 +36,7 @@ module.exports = {
             let token = jsonWebToken.sign({
                 name: newUser.nickName,
                 pwd: newUser.pwd,
-                exp: Math.floor(Date.now() / 1000) + 60// 3600 * 24 * jwt_expdays // 有效时间7天
+                exp: Math.floor(Date.now() / 1000) +  3600 * 24 * jwt_expdays // 有效时间7天
             }, 'windmill');
             ctx.response.set('Authorization', token);
             ctx.response.status = 200;
@@ -55,10 +55,12 @@ module.exports = {
             ctx.response.status = 401;
             ctx.body = "用户名不存在或密码错误";
         } else {
+            user.state = true;
+            await user.save();
             let token = jsonWebToken.sign({
                 name: user.nickName, 
                 pwd: user.pwd,
-                exp: Math.floor(Date.now() / 1000) + 60*60 // 有效时间一小时
+                exp: Math.floor(Date.now() / 1000) + 3600 * 24 * jwt_expdays // 有效时间一小时
             },'windmill');
             ctx.response.set('Authorization', token);
             ctx.response.status = 200;
