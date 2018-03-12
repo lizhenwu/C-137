@@ -115,7 +115,7 @@ module.exports = {
             user = ctx.state.user.name;
             key = 'avatar' + parseInt(Date.now()) + '.' + type,
             filePath = await uploadAvatar(key, baseCode),
-            product = await User.update({nickName: user}, {$set: {avatar: '//' + filePath}});
+            product = await User.update({nickName: user}, {$set: {avatar: 'http://' + filePath}});
         if(product.n === 0) {
             ctx.body = 'no exist';
         }
