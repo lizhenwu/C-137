@@ -1,8 +1,12 @@
 # C-137
-vue聊天室
 
+vue2全家桶打造的即时聊天室SPA，目前还未完工，但已经可以使用基本功能，线上地址[c137.zwait.cc](https://c137.zwait.cc)，UI部分参照了[Discord](https://discordapp.com/invite/HBherRA),后端部分借鉴过[NAMI](https://github.com/redsx/NAMI)，向他们表示感谢
+
+> C-137是[《瑞克和莫蒂》](https://movie.douban.com/subject/11537954/)中主人公Rick来自的次元在宇宙中的代号
+
+## 功能
 - [ ] 创建房间
-- [ ] 加入某个房间后即使在home页也能在sideBar看到房间列表上的消息提示
+- [ ] sideBar中房间列表上显示消息提示
 - [ ] 永久退出房间
 - [x] 在home页能看到所有在线用户
 - [ ] 可以选择向别人显示或隐藏当前所在房间
@@ -13,11 +17,8 @@ vue聊天室
 - [ ] 房间创建者可以选择是否让未加入此房间的用户看到聊天记录， 但一定要加入才能发言
 - [ ] 进入某个还未加入的房间时输入框不可用
 - [ ] 登录后已加入的房间就开始接收消息，未加入的房间需要点击加入后才接收消息
-- [ ] 在home页时已加入的房间可以接收消息， 点击进入房间后只显示收到的消息，在提示上选择显示下线期间错过的消息
-- [ ] 用户发送一条新消息后在前端直接加入消息列表并显示(自带一个颜色动画类)，后端反馈发送成功后去掉它的动画类
-
-
-把loading组件在需要的位置都写一个(因为目前仅需两个)，在state里加入loadingPosition变量，用在v-if中决定是否显示以及显示在哪个位置,要改成命令式插入的形式......
+- [ ] 在home页时已加入的房间可以接收消息， 点击进入房间后只显示收到的消息，在提示上点击选择显示下线期间错过的消息
+- [ ] 显示消息发送状态
 
 
 房间类型： 
@@ -59,15 +60,39 @@ justify-content: flex-end;
     margin: auto;
 ```
 
-## todo
+## 近期todo
 
 1. welcome页背景
-2. 所有字体
+2. ~~所有字体~~
 3. CSS响应式
 4. 创建新房间
 5. 全局less变量单独写一个文件,引入webpack.config,怎么在vue组件文件中使用
 6. 查找成员
 7. 更改在线状态 
 8. ~~webpack打包，三个四个配置文件~~
-9. 生产环境版本使用cdn上的iconfont而非本地文件
+9. ~~生产环境版本使用cdn上的iconfont而非本地文件~~
 10. CSS冗余
+
+## 使用
+
+```sh
+git clone https://github.com/lizhenwu/C-137.git
+
+cd C-137
+
+npm install
+```
+### dev 
+
+```sh
+npm run server
+
+npm run build:dll
+
+npm run dev
+```
+### dist
+
+```sh
+npm run dist
+```
