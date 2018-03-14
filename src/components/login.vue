@@ -18,6 +18,8 @@
     </section>
 </template>
 <script>
+const regForName = /^[\u4e00-\u9fa5_a-zA-Z0-9]{2,8}$/gi;
+const regForPwd = /^[a-zA-Z0-9.*]{5,12}$/gi;
 export default {
   data() {
     return {
@@ -26,10 +28,26 @@ export default {
     };
   },
   methods: {
+    validate: function(name, pwd) {
+      if(!regForName.test(name)) {
+        return this.$message({
+          type: 'info',
+          message: '用户名由2到8位字母数字汉字下划线组成'
+        })
+      }
+      if(!regForPwd.test(pwd)) {
+        return this.$message({
+          type: 'info',
+          message: '密码由5到12位字母数字.*组成'
+        })
+      }
+      return true;
+    },
     signup: function() {
       let vm = this;
       if (this.userName && this.passWord) {
-        vm
+        if(this.validate(this.userName, this.passWord)) {
+          vm
           .$axios({
             method: "post",
             url: "/api/signup",
@@ -54,6 +72,7 @@ export default {
           .catch(function(err) {
             this.$message({type: 'error', message: err.response.data})
           });
+        }
       } else {
         this.$message({type: 'info', message: '请输入用户名和密码'})
       }
