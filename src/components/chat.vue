@@ -148,11 +148,26 @@
     }
     .home{
         display: flex;
+        position: relative;
         background: #434140;
-        color: #737f8d;
+        color: hsla(0, 0, 100%, .9);;
         flex-grow: 1;
         justify-content: center;
         align-items: center;
+        &::before{
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            margin: auto;
+            background-image: url(https://i.loli.net/2018/03/14/5aa8d55242559.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: grayscale(100%);
+            opacity: .18;
+        }
+        span{
+            margin-top: -100px;
+        }
     }
     @media screen and (max-width: 1320px) {
         main{

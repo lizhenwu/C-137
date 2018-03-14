@@ -62,7 +62,7 @@ justify-content: flex-end;
 
 ## 近期todo
 
-1. welcome页背景
+1. ~~welcome页背景~~
 2. ~~所有字体~~
 3. CSS响应式
 4. 创建新房间
