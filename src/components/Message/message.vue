@@ -36,6 +36,10 @@ export default {
     close() {
         this.closed = true;
     },
+    beforeDestroy() {
+        this.type = '';
+        this.message = '';
+    },
     destroy() {
         this.$el.removeEventListener('transitionend', this.destroy);
         this.$destroy();
