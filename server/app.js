@@ -16,7 +16,7 @@ app.env = process.env.NODE_ENV;
 
 app.use(errHandler);
 // login和signup路由排除jwt验证
-app.use(jwt({ secret: 'windmill'}).unless({ path: [/^\/api(\/login|\/signup)/] }));
+app.use(jwt({ secret: 'windmill'}).unless({ path: [/^\/api\/login/], methos: 'put'}));
 
 // 提供ctx.request.body或ctx.request.rawbody
 app.use(bodyParser());

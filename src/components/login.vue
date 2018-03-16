@@ -49,8 +49,8 @@ export default {
         if(this.validate(this.userName, this.passWord)) {
           vm
           .$axios({
-            method: "post",
-            url: "/api/signup",
+            method: "put",
+            url: `/api/user/:${this.userName}`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
             },
