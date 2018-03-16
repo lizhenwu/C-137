@@ -15,8 +15,10 @@ const routes = {
 }
 // 登录
 router.post(routes.login, User.userLogin);
-// 用户
+// 获取用户信息
 router.get(routes.user, User.getUserInfo);
+// 修改用户信息
+router.post(router.user, User.upadateUserInfo)
 
 router.post(routes.upload, User.changeUserAvatar)
 
