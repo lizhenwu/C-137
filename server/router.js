@@ -20,9 +20,9 @@ router.post(routes.login, User.userLogin);
 // 获取用户信息
 router.get(routes.user, User.getUserInfo);
 // 修改用户信息
-router.post(router.user, User.upadateUserInfo)
+router.post(routes.user, User.upadateUserInfo)
 // 用户注册
-router.put(router.user, User.createUser)
+router.put(routes.user, User.createUser)
 
 router.post(routes.upload, User.changeUserAvatar)
 
