@@ -72,6 +72,8 @@ justify-content: flex-end;
 8. ~~webpack打包，三个四个配置文件~~
 9. ~~生产环境版本使用cdn上的iconfont而非本地文件~~
 10. CSS冗余
+11. PC端多开
+12. 多终端同步
 
 ## 使用
 
