@@ -98,3 +98,5 @@ npm run dev
 ```sh
 npm run dist
 ```
+
+PS: 以后要做到把项目一开始时的设计和考量记录下来
