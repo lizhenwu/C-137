@@ -9,5 +9,6 @@ module.exports = {
     db: isDev ? 'test' : 'c137',
     db_account: isDev ? null : 'windmill',
     db_password: isDev ? null :'54321',
-    jwt_expdays: 7
+    jwt_expdays: 7,
+    domain: isDev ? 'localhost' : 'c137.zwait.cc'
 }

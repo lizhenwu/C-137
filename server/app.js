@@ -6,7 +6,8 @@ const jwt = require('koa-jwt');
 
 const { router,routes } = require('./router');
 const initIO = require('./socket');
-const {errHandler} = require('./utils')
+const {errHandler} = require('./utils');
+const config = require('./config');
 
 const app = new koa();
 const server = require('http').createServer(app.callback());
@@ -16,7 +17,9 @@ app.env = process.env.NODE_ENV;
 
 app.use(errHandler);
 // login和signup路由排除jwt验证
-app.use(jwt({ secret: 'windmill'}).unless({ path: [/^\/api\/login/], methos: 'put'}));
+app.use(jwt({ secret: 'windmill'}).unless({custom: function(ctx) {
+    return ctx.url === '/api/login' || ctx.hostname === config.domain && ctx.method === 'PUT'
+}}));
 
 // 提供ctx.request.body或ctx.request.rawbody
 app.use(bodyParser());
