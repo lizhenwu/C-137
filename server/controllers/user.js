@@ -17,7 +17,7 @@ module.exports = {
      * 用户注册路由
      * 
     */
-    async createUser(ctx, next) {
+    async createUser(ctx, next) {  
         let userInfo = JSON.parse(ctx.request.rawBody),
             publicRoom = await Room.find().byName('public').select('_id').exec(),
             user = await User.find().byName(userInfo.name).exec();
@@ -53,7 +53,7 @@ module.exports = {
         let user = await query;
         if(!user) {
             ctx.response.status = 401;
-            ctx.body = "用户名不存在或密码错误";
+            ctx.body = '用户名不存在或密码错误';
         } else {
             user.state = true;
             await user.save();
@@ -71,8 +71,7 @@ module.exports = {
     /**
      * 用户登出
      * 放弃使用路由，改用socket.io
-     * @param {*} ctx 
-     * @param {*} next 
+     * @param {*} socket 
      */
     async userLogout(socket) {
         let user = socket.nickName;
@@ -112,7 +111,7 @@ module.exports = {
      */
     async changeUserAvatar(ctx, next) {
         let {type, baseCode} = JSON.parse(ctx.request.rawBody),
-            user = ctx.state.user.name;
+            user = ctx.state.user.name,
             key = 'avatar' + parseInt(Date.now()) + '.' + type,
             filePath = await uploadAvatar(key, baseCode),
             product = await User.update({nickName: user}, {$set: {avatar: 'http://' + filePath}});
