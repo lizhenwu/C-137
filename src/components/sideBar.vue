@@ -2,7 +2,7 @@
   <div class="side-bar">
             <header class="header" @click.stop="showMenu">
                 <span>C-137</span>
-                <i class="iconfont icon-jiantouxia" title="菜单"></i>
+                <i class="iconfont icon-jiantouxia" v-toolTip:right="'菜单'"></i>
             </header>
             <transition name="menu">
             <div class="menu" v-if="isMenuShow">
@@ -23,8 +23,8 @@
                 <div class="avatar" :style="{backgroundImage: `url(${avatar})`}"></div>
                 <span>{{user}}</span>
                 <span class="btn">
-                    <i class="iconfont" title="状态 todo">&#xe73a;</i>
-                    <i class="iconfont" @click="toggleSettings" title="个人设置">&#xe74c;</i>
+                    <i class="iconfont" v-toolTip:top="'状态设置todo'">&#xe73a;</i>
+                    <i class="iconfont" @click="toggleSettings" v-toolTip:top="'个人设置todo'">&#xe74c;</i>
                 </span>
             </div>
         </div>
@@ -110,6 +110,7 @@ export default {
   i {
     opacity: 0.6;
     user-select: none;
+    padding: 5px;
   }
   .header {
     font-size: 16px;
@@ -127,6 +128,10 @@ export default {
     }
     span {
       flex: 1;
+    }
+    i{
+      line-height: initial;
+      display: inline-block;
     }
   }
   .list {
@@ -194,7 +199,6 @@ export default {
       margin-right: 15px;
       i {
         cursor: pointer;
-        padding: 5px;
         border-radius: 3px;
         &:hover {
           background: darken(#434140, 17%);

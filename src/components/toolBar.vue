@@ -5,13 +5,13 @@
         <span v-if="notice !== ''" title="公告">{{notice}}</span>
       </div>
       <div class="bar-items">
-        <i class="iconfont" title="todo">&#xe627;</i>
-        <i v-on:click="changeDisplay" class="iconfont" title="收起/显示群组列表">&#xe746;</i>
+        <i class="iconfont" v-toolTip:bottom="'点赞???'">&#xe627;</i>
+        <i v-on:click="changeDisplay" class="iconfont" v-toolTip:bottom="'收起/显示群组列表'">&#xe746;</i>
         <span>
-            <input type="text" placeholder="Search" title="查找成员todo">
+            <input type="text" placeholder="Search" v-toolTip:bottom="'查找成员todo'">
             <i class="iconfont">&#xe632;</i>
         </span>
-        <i class="iconfont" title="群组信息todo">&#xe64c;</i>
+        <i class="iconfont" v-toolTip:bottom="'群组信息todo'">&#xe64c;</i>
       </div>
   </header>
 </template>
