@@ -70,6 +70,7 @@
                         this.$refs.msgWrapper.scrollTop = this.$refs.msgWrapper.scrollHeight; 
                     })
                 }
+                // 加载历史记录成功取消loading在此处
                 this.loading = false
                 // console.log(this.msgBox.scrollHeight)  // dom更新前的
             },

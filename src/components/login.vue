@@ -87,6 +87,7 @@ export default {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
             },
+            // 对象数据会自动转换成JSON发送
             data: {
               name: this.userName,
               password: this.passWord
