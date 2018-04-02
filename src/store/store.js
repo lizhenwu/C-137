@@ -142,6 +142,7 @@ const store = new Vuex.Store({
             commit(EVENT_REGISTE,{
                 eventType: 'user in',
                 handler: function(data) {
+                    if(data.nickName === state.user) return;
                     commit(UPDATE_ONLINEUSERS, data);
                     Vue.prototype.$notify({message: `${data.nickName}上线了`});
                 }
@@ -149,6 +150,7 @@ const store = new Vuex.Store({
             commit(EVENT_REGISTE,{
                 eventType: 'user out',
                 handler: function(data) {
+                    if(data.nickName === state.user) return;
                     let index = state.onlineUsers.findIndex(user => user.nickName === data.nickName);
                     state.onlineUsers.splice(index,1);
                     Vue.prototype.$notify({message: `${data.nickName}下线了`});
