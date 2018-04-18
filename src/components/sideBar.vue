@@ -20,30 +20,64 @@
                 </ul>
             </div>
             <div class="user-board">
-                <div class="avatar" :style="{backgroundImage: `url(${avatar})`}"></div>
+              <div ref="userInfo" class="user-info normal-flex-box">
+                <div class="avatar" :style="{backgroundImage: `url(${avatar})`}">
+                  <i class="current-state" :style="{background: states[currentState]}"></i>
+                </div>
                 <span>{{user}}</span>
-                <span class="btn">
-                    <i class="iconfont" v-toolTip:top="'状态设置todo'">&#xe73a;</i>
-                    <i class="iconfont" @click="toggleSettings" v-toolTip:top="'个人设置todo'">&#xe74c;</i>
-                </span>
+              </div>
+              <div ref="states" @click="changeState" class="states normal-flex-box hidden">
+                <span data-state="online"><i></i>在线</span>
+                <span data-state="hidden"><i></i>隐身</span>
+                <span data-state="nodisturb"><i></i>勿扰</span>
+              </div>
+              <span class="btn">
+                  <i class="iconfont" v-toolTip:top="'状态设置todo'" @click="showStates">&#xe73a;</i>
+                  <i class="iconfont" @click="toggleSettings" v-toolTip:top="'个人设置todo'">&#xe74c;</i>
+              </span>
             </div>
         </div>
 </template>
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import {states} from '../utils/data';
 export default {
   data: function() {
     return {
-      isMenuShow: false
+      isMenuShow: false,
+      states: states
     };
   },
   computed: {
-    ...mapState(["socket", "user", "avatar", "rooms", "insideRoom"]),
-    ...mapGetters(["roomData"])
+    ...mapState(["socket", "user", "avatar", "rooms", "insideRoom", 'currentState']),
+    ...mapGetters(["roomData"]),
+  },
+  watch: {
+    currentState: function(newVal, oldVal) {
+      this.socket.emit('state change', newVal, function(data) {
+        if(data.err) {
+          this.$message({
+            type: 'error',
+            message: '操作失败'
+          })
+        }
+        return;
+      })
+    }
   },
   methods: {
     showMenu() {
       this.isMenuShow = !this.isMenuShow;
+    },
+    showStates() {
+      this.$refs.userInfo.classList.toggle('hidden');
+      this.$refs.states.classList.toggle('hidden');
+    },
+    changeState(e) {
+      this.$store.commit('CHANGE_STATE', {
+        state: e.target.dataset.state
+      });
+      this.showStates();
     },
     toggleRoomPage() {
       this.$emit("roomPage");
@@ -56,8 +90,6 @@ export default {
     },
     signOut() {
       this.socket.disconnect();
-      localStorage.user = '';
-      localStorage.token = '';
       this.$message({
         type: 'info',
         message: '已注销登录'
@@ -174,6 +206,9 @@ export default {
         background-color: rgba(191, 152, 143, 0.2);
       }
     }
+    .menu-items{
+      margin: 1em 0;
+    }
   }
   .user-board {
     position: absolute;
@@ -182,15 +217,63 @@ export default {
     background: darken(#434140, 15%);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
-    .avatar {
-      height: 30px;
-      width: 30px;
-      background: white;
-      background-size: cover;
-      border-radius: 50%;
-      margin: 10px 20px;
-      margin-right: 10px;
+    .user-info{
+      transition: all .5s ease;
+    }
+    .hidden.user-info{
+      transform: scale(0);
+    }
+    .states{
+      font-size: 12px;
+      line-height: 50px;
+      overflow: hidden;
+      white-space: nowrap;
+      span{
+        transition: all .5s ease;
+        cursor: pointer;
+        margin: 0 6px;
+        color: hsla(0, 100%, 100%, .6);
+        &:hover{
+          color: #fff;
+        }
+        i{
+          height: 10px;
+          width: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          margin-right: 10px;
+          pointer-events: none;
+          opacity: 1;
+        }
+      }
+      span:nth-of-type(1) {
+        i{
+          background: #43b581;
+        }
+      }
+      span:nth-of-type(3) {
+        i{
+          background: #f04747;
+        }
+      }
+      span:nth-of-type(2) {
+        i{
+          background: #747f8d;
+        }
+      }
+    }
+    .hidden.states{
+      span:nth-of-type(1){
+        transform: translate3d(200%, 0, 0);
+      }
+      span:nth-of-type(2){
+        transform: translate3d(100%, 0, 0);
+      }
+      span:nth-of-type(3){
+        transform: translate3d(0%, 0, 0);
+      }
     }
     .btn {
       flex-grow: 1;

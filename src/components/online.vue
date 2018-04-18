@@ -3,8 +3,10 @@
   <div class="members-group">
     <header>当前在线</header>
     <ul class="members-list">
-        <li class="member-info" :key="index" v-for="(item, index) of onlineUsers">
-        <div class="member-avatar" :style="{backgroundImage: `url(${item.avatar})`}"></div>
+        <li class="member-info" :key="item.nickName" v-for="item of nonHidden(onlineUsers)">
+        <div class="avatar" :style="{backgroundImage: `url(${item.avatar})`}">
+            <i class="current-state" :style="{background: states[item.onlineState]}"></i>
+        </div>
         <span class="member-id">{{item.nickName}}</span>
       </li>
     </ul>
@@ -18,12 +20,26 @@
     </div>
 </template>
 <script>
-    import { mapState } from "vuex";
-    export default {        
-        computed: mapState([
-            'socket',
-            'onlineUsers'
-        ])
+    import { mapState, mapGetters } from "vuex";
+    import {states} from '../utils/data';
+    export default {    
+        data: function() {
+            return {
+                states: states
+            }
+        }, 
+        computed: {
+            ...mapState([
+                'onlineUsers'
+            ])
+        },
+        methods: {
+            nonHidden: function(users) {
+                return users.filter(function(user) {
+                    return user.onlineState !== 'hidden';
+                })
+            }
+        }
     }
 
     
@@ -51,22 +67,16 @@
                 transition: all .3s ease;
                 background-color: darken(#434140, 7%)
             }
-            div{
-                display: inline-block;
-            }
             .member-info{
                 padding: 5px 20px;
                 cursor: pointer;
                 display: flex;
                 align-items: center
             }
-            .member-avatar{
-                height: 30px;
-                width: 30px;
-                border-radius: 50%;
-                background: white;
-                background-size: cover;
-                margin-right: 10px;
+            .avatar{
+                i{
+                    padding: 5px;
+                }
             }
             .member-id{
                 vertical-align: baseline
