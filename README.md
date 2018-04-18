@@ -69,15 +69,17 @@ justify-content: flex-end;
 - CSS3的calc函数在使用时参数与运算符之间必须要有空格否则无效
 - 绝对定位时用right就只能margin-right有效，用left，就只能margin-left有效
 
+less中calc的使用方式：calc(~"100% - 40px")
+
 ## 近期todo
 
 1. ~~welcome页背景~~
 2. ~~所有字体~~
 3. CSS响应式
-4. 创建新房间
+4. ~~创建新房间~~
 5. 全局less变量单独写一个文件,引入webpack.config,怎么在vue组件文件中使用
 6. 查找成员
-7. 更改在线状态 
+7. ~~更改在线状态~~ 
 8. ~~webpack打包，三个四个配置文件~~
 9. ~~生产环境版本使用cdn上的iconfont而非本地文件~~
 10. CSS冗余
