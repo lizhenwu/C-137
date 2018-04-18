@@ -12,7 +12,7 @@
       </div>
       <span>密码</span>
       <div class="input-wrapper"> 
-      <input type="text" v-model="password">
+      <input type="password" v-model="password">
       <i class="iconfont icon-xuanzhong" title="确认修改"></i>
       </div>
     </div>
@@ -115,7 +115,7 @@ export default {
     justify-content: space-around;
     align-items: center;
     padding: 20px 30px;
-    color: #292827;
+    color: rgba(255, 255, 255, .8);
     .img-input {
       position: relative;
       border-radius: 50%;
@@ -153,17 +153,6 @@ export default {
         display: none;
       }
       input{
-        outline: none;
-        border: none;
-        border-bottom: 1px solid lighten(#292827, 50%);
-        transition: all .2s ease;
-        &::-webkit-input-placeholder {
-          color: lighten(#292827, 50%)
-        }
-        &:focus{
-          transition: all .2s ease;
-          border-bottom-color: #292827;
-        }
         &:focus + i{
           display: inline;
         }

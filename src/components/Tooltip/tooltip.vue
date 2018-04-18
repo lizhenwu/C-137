@@ -65,7 +65,7 @@ export default {
         margin-left: 10px; 
         .tooltip-arrow{
             left: -16px;
-            top: calc(~"50% - 6px");
+            top: calc(~"50% - 6px"); // 运算符左右必须有空格
             border-right: 8px solid darken(#434140, 30%);
         }
     }
