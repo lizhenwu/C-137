@@ -12,9 +12,12 @@ const CHANGE_ROOM = 'CHANGE_ROOM';
 const START_LOADING = 'START_LOADING';
 const STOP_LOADING = 'STOP_LOADING';
 const ADD_NEW_MSG = 'ADD_NEW_MSG';
+const ADD_NEW_ROOM = 'ADD_NEW_ROOM';
 const LEAVE_ROOM = 'LEAVE_ROOM';
 const ENTER_ROOM = 'ENTER_ROOM';
 const CHANGE_AVATAR = 'CHANGE_AVATAR';
+const CHANGE_STATE = 'CHANGE_STATE';
+const SIGN_OUT = 'SIGN_OUT';
 const domain = process.env.NODE_ENV === 'production' ? location.origin : 'http://localhost:8080';
 
 const store = new Vuex.Store({
@@ -27,6 +30,7 @@ const store = new Vuex.Store({
         logedIn: false,
         avatar: null,
         rooms: [],
+        currentState: 'online',
         insideRoom: false,
         currentRoomIdx: undefined,
         // onlineUsers应该是包含用户数据对象的数组
@@ -46,9 +50,32 @@ const store = new Vuex.Store({
         },
         currentMsgArr: (state, getters) => {
             return getters.roomData.msgs || []
+        },
+        nonHiddUsers: state => {
+            return state.onlineUsers.filter(item => {
+                item.onlineState !== 'hidden'
+            })
         }
     },
     mutations: {
+        // 注销登录后将state归零
+        [SIGN_OUT](state) {
+            state.user = localStorage.user = '';
+            state.token.localStorage.token = '';
+            state.loadingPosition = '';
+            state.online = false;
+            state.socket =  null;
+            state.logedIn = false;
+            state.avatar = null;
+            state.rooms = [];
+            state.currentState = 'online';
+            state.insideRoom = false;
+            state.currentRoomIdx = undefined;
+            state.onlineUsers = [];
+        },
+        [CHANGE_STATE](state, targetState) {
+            state.currentState = targetState.state;
+        },
         // 登录之后创建socket实例
         // 在App组件中通过socketInit提交此mutation
         [CREATE_SOCKET](state) {
@@ -57,11 +84,11 @@ const store = new Vuex.Store({
             state.socket = socket.open();
         },
         // 更新在线用户数据，nickName数组
-        [UPDATE_ONLINEUSERS](state,data) {
+        [UPDATE_ONLINEUSERS](state, data) {
             data = Array.isArray(data) ? data : [data];
             state.onlineUsers.push(...data);
         },
-        [EVENT_REGISTE](state,event) {
+        [EVENT_REGISTE](state, event) {
             state.socket.on(event.eventType, event.handler)
         },
         [INIT_USER_DATA](state, data) {
@@ -85,6 +112,9 @@ const store = new Vuex.Store({
                 state.rooms[data.idx].roomData.notice = data.roomData.notice;
             }
             state.currentRoomIdx = data.idx;
+        },
+        [ADD_NEW_ROOM](state, data) {
+            state.rooms.push(data);
         },
         [CHANGE_AVATAR](state, data) {
             state.avatar = data
@@ -146,7 +176,7 @@ const store = new Vuex.Store({
                     commit(UPDATE_ONLINEUSERS, data);
                     Vue.prototype.$notify({message: `${data.nickName}上线了`});
                 }
-            })
+            });
             commit(EVENT_REGISTE,{
                 eventType: 'user out',
                 handler: function(data) {
@@ -155,11 +185,23 @@ const store = new Vuex.Store({
                     state.onlineUsers.splice(index,1);
                     Vue.prototype.$notify({message: `${data.nickName}下线了`});
                 }
-            })
+            });
             commit(EVENT_REGISTE, {
                 eventType: 'new msg',
                 handler: function(data) {
                     commit(ADD_NEW_MSG, data)
+                }
+            });
+            commit(EVENT_REGISTE, {
+                eventType: 'state change',
+                handler: function(data) {
+                    let idx = state.onlineUsers.findIndex(item => {
+                        return item.nickName === data.nickName;
+                    });
+                    if(!~idx) {
+                        return;
+                    };
+                    state.onlineUsers[idx].onlineState = data.onlineState;
                 }
             })
         },
