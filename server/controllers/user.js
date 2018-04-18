@@ -19,7 +19,7 @@ module.exports = {
     */
     async createUser(ctx, next) {  
         let userInfo = JSON.parse(ctx.request.rawBody),
-            publicRoom = await Room.find().byName('public').select('_id').exec(),
+            // publicRoom = await Room.find().byName('public').select('_id').exec(),
             user = await User.find().byName(userInfo.name).exec();
         if (user) {
             ctx.response.status = 200;
@@ -29,7 +29,7 @@ module.exports = {
                 nickName: userInfo.name,
                 pwd: cryptoFunc(userInfo.password),
                 state: true,
-                rooms: [publicRoom._id]
+                rooms: []
             });
             // save返回的是promise，不能exec
             await newUser.save();
@@ -55,8 +55,6 @@ module.exports = {
             ctx.response.status = 401;
             ctx.body = '用户名不存在或密码错误';
         } else {
-            user.state = true;
-            await user.save();
             let token = jsonWebToken.sign({
                 name: user.nickName, 
                 pwd: user.pwd,
@@ -92,13 +90,17 @@ module.exports = {
             path: 'rooms', 
             select: 'name -_id',
             options: {
-                sort: '-initialTtime'
+                sort: '-initialTime'
             }
-        }).select('nickName avatar').exec();
-        
+        }).select('nickName avatar state').exec();
+        if(!userInfo.state) {
+            // 这个地方应该解析token然后用User.find().login(token)
+            await User.findOneAndUpdate({nickName: userInfo.nickName}, {$set: {state: true}}).exec();
+        }
         // 获取当前在线用户的nickName和avatar信息
-        let currentUsers = await User.find().where('state', true).ne('nickName', name).limit(20).select('nickName avatar').exec();
-
+        let currentUsers = await User.find().where('state', true).nor([{'nickName': name},{'onlineState': 'hidden'}]).limit(20).select('nickName avatar onlineState').exec();
+        let publicRooms = await Room.find().where('isPublic', true).select('name').exec();
+        userInfo.rooms.push(...publicRooms);
         ctx.body = {userInfo, currentUsers};
     },
 
@@ -121,6 +123,19 @@ module.exports = {
         ctx.body = 'update success';
     },
 
+    async changeUserState(socket, state, cb) {
+        let nickName = socket.nickName;
+        let user = await User.findOneAndUpdate({nickName: nickName},{$set:{onlineState: state}}).exec();
+        if(user) {
+            socket.broadcast.emit('state change', {
+                nickName: nickName,
+                onlineState: state
+            })
+            cb({info: '操作成功'});
+        } else{
+            cb({err: '操作失败'});
+        }
+    },
     /**
      * 更改用户信息
     */

@@ -13,7 +13,8 @@ module.exports = function (io) {
             })
             socket.broadcast.emit('user in', {
                 nickName: data.user,
-                avatar: data.avatar
+                avatar: data.avatar,
+                onlineState: 'online'
             })
         })
         // 加入某个房间
@@ -23,7 +24,7 @@ module.exports = function (io) {
             cb({
                 roomName: roomName,
                 roomData: {
-                    notice: "it's a fucking notice"
+                    notice: 'it\'s a fucking notice'
                 }
             })
         })
@@ -36,10 +37,20 @@ module.exports = function (io) {
             Room.getRoomInfo(roomName, cb)
         })
 
+        // 创建新房间
+        socket.on('new room', (roomData, cb) => {
+            roomData.admin = socket.nickName;
+            Room.createRoom(roomData, cb);
+        })
+
         socket.on('new msg', (msgWrap, cb) => {
             Msg.saveMsg(socket, msgWrap, cb)
         })
-
+        // 修改用户在线状态(勿扰，隐身等)
+        socket.on('state change', (targetState, cb) => {
+            
+            User.changeUserState(socket, targetState, cb);
+        })
         socket.on('disconnect', (reason) => {
             User.userLogout(socket);
         });

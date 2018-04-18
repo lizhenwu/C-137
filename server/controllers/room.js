@@ -2,8 +2,33 @@ const Room = require('../models/room');
 const User = require('../models/user');
 module.exports = {
     
-    async createRoom() {
-
+    async createRoom(roomData, cb) {
+        
+        let info = {};
+        // 先查询用户创建过的房间个数，超过一定数目禁止再创建
+        let user = await User.find().byName(roomData.admin).exec();
+        let ownRooms = await Room.find({admin: user._id}).exec();
+        if(ownRooms.length >= 3) {
+            info.err = '已创建房3个房间';
+            return cb(info);
+        }
+        let room = await Room.find().byName(roomData.roomName).exec();
+        if(room) {
+            info.err = '房间已存在';
+        } else {
+            let newRoom = new Room({
+                name: roomData.roomName,
+                admin: user._id,
+                isPublic: roomData.isPublic,
+                notice: roomData.roomNotice,
+                members: [user._id]
+            });
+            newRoom = await newRoom.save();
+            user.rooms.push(newRoom._id);
+            await user.save();
+            info.name = newRoom.name;
+        }
+        cb(info);
     },
 
     async initRoomList(user, cb) {
