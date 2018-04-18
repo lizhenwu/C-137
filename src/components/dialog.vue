@@ -15,7 +15,7 @@ export default {
     flex-direction: column;
     // min-width: 400px;
     // min-height: 300px;
-    width: 50%;
+    width: 40%;
     height: 50%;
     position: absolute;
     left: 0;
@@ -24,7 +24,8 @@ export default {
     bottom: 0; 
     margin: auto;
     z-index: 1000;
-    background: #fff;
+    background: darken(#434140, 10%);
+    color: #fff;
     border-radius: 3px;
     box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, .4);
     header{
@@ -43,13 +44,15 @@ export default {
             display: inline-block;
             // position: relative;
             right: 0;
-            padding: 4px;
+            padding: 6px;
             border-radius: 50%;
             border: 2px solid #434140;
+            color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             &:hover{
-                background-color: rgba(0, 0, 0, .2);
-                transition: background-color .2s ease;
+                background-color: rgba(255, 255, 255, .1);
+                color: rgba(255, 255, 255, 0.8);
+                transition: all .2s ease;
             }
         }
     }
