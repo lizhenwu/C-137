@@ -33,6 +33,99 @@ html, body{
 h1, h2, h3, h4, h5, h6, input, textarea{
   font-family: inherit;
   &::-webkit-input-placeholder{
-    font-family: inherit
+    font-family: inherit;
+    color: hsla(0, 0, 100%, .4);
+  }
+}
+input{
+  outline: none;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, .4);
+  color: rgba(255, 255, 255, .4);
+  transition: all .2s ease;
+  padding: .1em .2em;
+  &:focus{
+    transition: all .2s ease;
+    color: rgba(255, 255, 255, .8);
+    border-bottom: 1px solid rgba(255, 255, 255, .8);
+  }
+}
+button{
+  cursor: pointer;
+  &:disabled{
+    cursor: not-allowed;
+    opacity: .5;
+  }
+}
+ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.hidden{
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+.normal-flex-box{
+  display: flex;
+  align-items: center;
+}
+.setting-item{
+  padding: 1em 0;
+  &:not(:last-child){
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+  }
+  label{
+    display: inline-block;
+    width: 3em;
+    height: 20px;
+    cursor: pointer;
+    padding: .2em;
+    border-radius: 3px;
+    background: darken(#434140, 15%);
+    transition: all .4s ease;
+    div{
+      height: 100%;
+      width: 14px;
+      border-radius: 3px;
+      background: @primal-bg;
+      transition: all .4s ease;
+    }
+  }
+  input[type="checkbox"]:checked+label{
+    background: lighten(#434140, 20%);
+    transition: all .4s ease;
+    div{
+      transform: translate3d(calc(~"3em - 100% - .4em"), 0, 0);
+      transition: all .4s ease;
+    }
+  }
+}
+.settings{
+  width: 70%;
+  margin: 2em auto;
+  color: rgba(255, 255, 255, .8)
+}
+.avatar {
+  height: 30px;
+  width: 30px;
+  background: white;
+  background-size: cover;
+  border-radius: 50%;
+  margin: 10px 20px;
+  margin-right: 10px;
+  display: inline-block;
+  position: relative;
+  i{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: solid 2px darken(#434140, 15%);
+    bottom: -3px;
+    right: -3px;
+    opacity: 1 !important;
   }
 }
