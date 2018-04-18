@@ -102,10 +102,6 @@
                 'socketInit'
             ])
         },
-        created() {
-            // 初始化socket, 但还未加入任何房间
-            this.socketInit();
-        },
         components:{roomList, online, msg, toolBar, myDialog, userSets, sideBar, systemSets, roomSets, loading}
     }
 </script>
