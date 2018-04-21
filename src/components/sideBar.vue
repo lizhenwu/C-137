@@ -15,8 +15,9 @@
             </div>
             </transition>
             <div class="list">
-                <ul>
-                    <li :class="{'active': roomData && roomData.name === item.name}" :key="index" v-for="(item, index) of rooms" @click="enterRoom(item.name)">{{item.name}}</li>
+                <ul :style="{height: `${rooms.length*42}px`}">
+                    <li :class="{'active': roomData && roomData.name === item.name}" :style="{top: `${index*42}px`}" :key="index" v-for="(item, index) of rooms" @click="enterRoom(item.name, index)">{{item.name}}</li>
+                    <li class="wrapper" :style="wrapperStyle"></li>
                 </ul>
             </div>
             <div class="user-board">
@@ -32,8 +33,8 @@
                 <span data-state="nodisturb"><i></i>勿扰</span>
               </div>
               <span class="btn">
-                  <i class="iconfont" v-toolTip:top="'状态设置todo'" @click="showStates">&#xe73a;</i>
-                  <i class="iconfont" @click="toggleSettings" v-toolTip:top="'个人设置todo'">&#xe74c;</i>
+                  <i class="iconfont" v-toolTip:top="'状态设置'" @click="showStates">&#xe73a;</i>
+                  <i class="iconfont" @click="toggleSettings" v-toolTip:top="'个人设置'">&#xe74c;</i>
               </span>
             </div>
         </div>
@@ -45,7 +46,11 @@ export default {
   data: function() {
     return {
       isMenuShow: false,
-      states: states
+      states: states,
+      y: 0,
+      wrapperStyle: {
+        transform: `translate3d(0, -100%, 0)`
+      }
     };
   },
   computed: {
@@ -73,6 +78,10 @@ export default {
       this.$refs.userInfo.classList.toggle('hidden');
       this.$refs.states.classList.toggle('hidden');
     },
+    changeWrapperPosition(i){
+      let y = i * 42 + 'px';
+      this.wrapperStyle.transform = `translate3d(0, ${y}, 0)`;
+    },
     changeState(e) {
       this.$store.commit('CHANGE_STATE', {
         state: e.target.dataset.state
@@ -96,7 +105,7 @@ export default {
       })
       this.$router.push({path: '/'});
     },
-    enterRoom(roomName) {
+    enterRoom(roomName, index) {
       this.$store.commit('LEAVE_ROOM');
       this.$store.commit('START_LOADING', 'content');
       let idx = this.rooms.findIndex(i => i.name === roomName);
@@ -114,11 +123,13 @@ export default {
             roomData: data.roomData
           });
           this.$store.commit('STOP_LOADING');
+          this.changeWrapperPosition(index);
         });
       } else {
         this.$store.commit("ENTER_ROOM");
         this.$store.commit('CHANGE_ROOM', { idx: idx });
         this.$store.commit('STOP_LOADING');
+        this.changeWrapperPosition(index);
       }
     },
     // 要看看vue对列表元素的事件绑定机制
@@ -166,31 +177,57 @@ export default {
       display: inline-block;
     }
   }
+  ul{
+    li{
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  }
   .list {
     margin-top: 2em;
     padding: 10px;
-  }
-  ul {
+    .wrapper{
+      top: 0;
+      left: 0;
+      height: 42px;
+      z-index: 0;
+      width: 100%;
+      transition: transform .3s ease;
+      background: #F5EBC7;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 6px;
+    }
+    ul {
     list-style: none;
     padding: 0;
+    position: relative;
+    overflow: hidden;
     li {
       display: block;
-      padding: 5px 10px;
       border-radius: 5px;
-      cursor: pointer;
+      position: absolute;
+      left: 0;
+      width: 100%;
+      z-index: 1;
       // height: 32px;
       line-height: 32px;
       opacity: 0.7;
-      &:hover {
+      transition: all .4s ease;
+      &.active{
+        color: black;
+      }
+      &:not(.active):hover {
+        
         opacity: 0.8;
-        background-color: lighten(#434140, 5%);
+        background-color: #434140;
       }
     }
-    li.active {
-      opacity: 1;
-      background-color: lighten(#434140, 10%);
-    }
+    // li.active {
+    //   opacity: 1;
+    //   background-color: lighten(#434140, 10%);
+    // }
   }
+  }
+  
   .menu {
     z-index: 100;
     position: absolute;
