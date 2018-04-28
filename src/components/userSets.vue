@@ -8,18 +8,19 @@
       <span>昵称</span>
       <div class="input-wrapper">
       <input type="text" :placeholder="this.user" v-model="nickName">
-      <i class="iconfont icon-xuanzhong" title="确认修改" @click="log"></i>
+      <i class="iconfont icon-xuanzhong" title="确认修改" @click.stop="changeUserInfo(nickName, 'name', $event)"></i>
       </div>
       <span>密码</span>
       <div class="input-wrapper"> 
       <input type="password" v-model="password">
-      <i class="iconfont icon-xuanzhong" title="确认修改"></i>
+      <i class="iconfont icon-xuanzhong" title="确认修改" @click.stop="changeUserInfo(password, 'pwd', $event)"></i>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex';
+import validate from '../utils/validate';
 export default {
   data: function() {
     return {
@@ -31,11 +32,38 @@ export default {
     ...mapState([
       'user',
       'avatar',
+      'socket'
     ])
   },
   methods: {
-    log() {
-      console.log(1)
+    changeUserInfo(str, type, e) {
+      e.target.focus();
+      if(!str) return;
+      let validateRes;
+      if(type === 'name') {
+        validateRes = validate(str, 'l0000000', this);
+      } else {
+        console.log(this.user)
+        validateRes = validate(this.user, str, this);
+      }
+      if(!validateRes) {
+        return;
+      }
+      console.log('content: ', str)
+      this.emitChangeInfo(str, type);
+      if(type === 'name') {
+        // 改名成功后修改浏览器端存储的nickName和storage里的user数据
+        this.$store.commit('CHANGE_USER_NAME', str);
+        localStorage.setItem('user', str);
+      }
+    },
+    emitChangeInfo(content, type) {
+      this.socket.emit(`${type} change`, content, info => {
+            return this.$message({
+              type: info.err ? 'error' : 'success',
+              message: info.content 
+            });
+      })
     },
     handleClick() {
       this.$refs.upload.value = null;
@@ -150,7 +178,7 @@ export default {
         bottom: 0;
         position: absolute;
         cursor: pointer;
-        display: none;
+        display: inline;
       }
       input{
         &:focus + i{

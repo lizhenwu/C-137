@@ -99,9 +99,14 @@ module.exports = {
         }
         // 获取当前在线用户的nickName和avatar信息
         let currentUsers = await User.find().where('state', true).nor([{'nickName': name},{'onlineState': 'hidden'}]).limit(20).select('nickName avatar onlineState').exec();
+        
+        // 查找历史用户，要把隐身状态的用户放在此处
+        let previousUsers = await User.find().or([{'state': false}, {'onlineState': 'hidden'}]).select('nickName avatar').exec();
+        
+        // 公共房间
         let publicRooms = await Room.find().where('isPublic', true).select('name').exec();
         userInfo.rooms.push(...publicRooms);
-        ctx.body = {userInfo, currentUsers};
+        ctx.body = {userInfo, currentUsers, previousUsers};
     },
 
     
@@ -139,7 +144,22 @@ module.exports = {
     /**
      * 更改用户信息
     */
-    async upadateUserInfo(ctx, next) {
-        
+    async upadateUserInfo(type, data, cb) {
+        console.log(data)
+        let info = {}, user;
+        if(type === 'nickName') {
+            user = await User.find().byName(data.val).exec();
+            if(user) {
+                info.err = 'name occupied';
+                info.content = 'nickName已被占用';
+            } else{
+                await User.findOneAndUpdate({nickName: data.user}, {$set: {nickName: data.val}});
+                info.content = 'nickName修改成功';
+            }
+        } else {
+            await User.findOneAndUpdate({nickName: data.user}, {$set: {pwd: cryptoFunc(data.val)}});
+            info.content = '密码修改成功';
+        }
+        return cb(info);
     },
 }

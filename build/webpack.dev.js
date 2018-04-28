@@ -14,7 +14,7 @@ module.exports = merge(baseWebpackConfig, {
         path: outputPath,
         // publicPath: '/',
         filename: 'js/[name].js',
-        chunkFilename: "js/[name].[chunkhash:8].js"
+        chunkFilename: 'js/[name].[chunkhash:8].js'
     },
     devServer:{
         open: true,
@@ -42,6 +42,7 @@ module.exports = merge(baseWebpackConfig, {
             favicon: path.resolve(__dirname, '../favicon.ico')
         }),
         new webpack.HotModuleReplacementPlugin(),
+        // HMR时显示模块的相对路径
         new webpack.NamedModulesPlugin()
     ]
 })

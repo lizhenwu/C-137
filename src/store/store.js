@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import io from 'socket.io-client';
+import {stateOrigin} from '../utils/data';
+import clone from '../utils/deepClone';
 Vue.use(Vuex);
 // 创建socket实例
 const CREATE_SOCKET = 'CREATE_SOCKET';
@@ -17,26 +19,13 @@ const LEAVE_ROOM = 'LEAVE_ROOM';
 const ENTER_ROOM = 'ENTER_ROOM';
 const CHANGE_AVATAR = 'CHANGE_AVATAR';
 const CHANGE_STATE = 'CHANGE_STATE';
-const SIGN_OUT = 'SIGN_OUT';
+const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
+const INIT_PREV_USERS = 'INIT_PREV_USERS';
+const RESET_STATE = 'RESET_STATE';
 const domain = process.env.NODE_ENV === 'production' ? location.origin : 'http://localhost:8080';
 
 const store = new Vuex.Store({
-    state: {
-        user: localStorage.user,
-        token: localStorage.token,
-        loadingPosition: '',
-        online: false,
-        socket: null,
-        logedIn: false,
-        avatar: null,
-        rooms: [],
-        currentState: 'online',
-        insideRoom: false,
-        currentRoomIdx: undefined,
-        // onlineUsers应该是包含用户数据对象的数组
-        // 对象数据结构为{nickName: '',avatar: ''},可能会加入更多
-        onlineUsers: []
-    },
+    state: clone(stateOrigin),
     getters: {
         roomData: state => {
             if(state.currentRoomIdx != undefined) {
@@ -58,20 +47,15 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-        // 注销登录后将state归零
-        [SIGN_OUT](state) {
-            state.user = localStorage.user = '';
-            state.token.localStorage.token = '';
-            state.loadingPosition = '';
-            state.online = false;
-            state.socket =  null;
-            state.logedIn = false;
-            state.avatar = null;
-            state.rooms = [];
-            state.currentState = 'online';
-            state.insideRoom = false;
-            state.currentRoomIdx = undefined;
-            state.onlineUsers = [];
+        [RESET_STATE](state) {
+            let freshState = clone(stateOrigin);
+            // 直接把freshState赋给state行不通
+            for(let i in state) {
+                state[i] = freshState[i];
+            }
+        },
+        [CHANGE_USER_NAME](state, newName) {
+            state.user = newName;
         },
         [CHANGE_STATE](state, targetState) {
             state.currentState = targetState.state;
@@ -87,6 +71,10 @@ const store = new Vuex.Store({
         [UPDATE_ONLINEUSERS](state, data) {
             data = Array.isArray(data) ? data : [data];
             state.onlineUsers.push(...data);
+        },
+        [INIT_PREV_USERS](state, data) {
+            data = Array.isArray(data) ? data : [data];
+            state.previousUsers.push(...data);
         },
         [EVENT_REGISTE](state, event) {
             state.socket.on(event.eventType, event.handler)
@@ -201,7 +189,16 @@ const store = new Vuex.Store({
                     if(!~idx) {
                         return;
                     };
-                    state.onlineUsers[idx].onlineState = data.onlineState;
+                    let user = state.onlineUsers[idx];
+                    if(user.onlineState !== 'hidden' && data.onlineState === 'hidden') {
+                        state.previousUsers.unshift(user);
+                    } else if(user.onlineState === 'hidden' && data.onlineState !== 'hidden') {
+                        let i = state.previousUsers.findIndex(item => {
+                            return item.nickName === user.nickName;
+                        })
+                        i > -1 ? state.previousUsers.splice(i, 1) : null; 
+                    }
+                    user.onlineState = data.onlineState;
                 }
             })
         },

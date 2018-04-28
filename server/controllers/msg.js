@@ -19,7 +19,7 @@ module.exports = {
             await msg.save();
             room.msgs.push(msg._id);
             await room.save();
-            msgWrap.msg.avatar = user.avatar;
+            msgWrap.msg.author.avatar = user.avatar;
             socket.to(msgWrap.roomName).broadcast.emit('new msg', msgWrap);
             cb({info: '发送成功'})
         } else {

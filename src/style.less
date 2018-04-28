@@ -4,7 +4,7 @@
   box-sizing: border-box
 }
 *::-webkit-scrollbar{
-  // background-color: darken(#434140, 5%);
+    background-color: darken(#434140, 5%);
     width: 12px;
 }
 *::-webkit-scrollbar-thumb{
@@ -30,12 +30,16 @@ html, body{
   background-color: @primal-bg;
   font-family: 'Nunito', sans-serif;
 }
-h1, h2, h3, h4, h5, h6, input, textarea{
+h1, h2, h3, h4, h5, h6, input, header, textarea, span{
   font-family: inherit;
+  white-space: nowrap;
   &::-webkit-input-placeholder{
     font-family: inherit;
     color: hsla(0, 0, 100%, .4);
   }
+}
+h3{
+  font-weight: 400;
 }
 input{
   outline: none;
@@ -128,4 +132,8 @@ ul{
     right: -3px;
     opacity: 1 !important;
   }
+}
+.collapse{
+  flex-basis: 0 !important;
+  transition: all .5s cubic-bezier(.08,.74,.37,.94);
 }

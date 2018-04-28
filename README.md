@@ -10,6 +10,10 @@ vue2全家桶打造的即时聊天室SPA，目前还未完工，但已经可以�
 
 一个功能：在toolbar上加一个按键，点击触发一个酷炫吊炸天的动画特效，然后得到一个3D的展示框(可以用到数据可视化的框架)，里面是聊天室出现频率高的一些关键词，可以拖动旋转，甚至可以用一些智能算法来做分析得到一个结果(???)
 
+### 2018/4/19
+
+一个考虑：把所有异步操作写在mutation里，然后通过一个修饰器添给他们加上start loading和stop loading操作
+
 ## 功能
 - [ ] 创建房间
 - [ ] sideBar中房间列表上显示消息提示
@@ -70,6 +74,11 @@ justify-content: flex-end;
 - 绝对定位时用right就只能margin-right有效，用left，就只能margin-left有效
 
 less中calc的使用方式：calc(~"100% - 40px")
+
+siderBar房间列表ul设为relative定位，子元素li为absolute定位时没有撑开ul，必须给ul设高度，待查
+
+消息输入框textarea监听keyup事件时用e.preventDefault来阻止换行失败，用keydown事件时成功阻止换行
+
 
 ## 近期todo
 

@@ -13,7 +13,7 @@
                     <span v-else>选择一个房间开始聊天吧!</span>
                 </div>
                 <!-- 在线用户信息 -->
-                <online v-show="isOnlineShown"></online>
+                <online :class="isOnlineShown ? '' : 'collapse'"></online>
             </div>
         </div>
         </div>

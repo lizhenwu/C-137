@@ -10,7 +10,7 @@
         "ecmaFeatures": {
             "jsx": false
         },
-        "sourceType": "script"
+        "sourceType": "module"
     },
     "rules": {
         "no-const-assign": "warn",

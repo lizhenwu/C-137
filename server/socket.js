@@ -51,6 +51,25 @@ module.exports = function (io) {
             
             User.changeUserState(socket, targetState, cb);
         })
+
+        // 修改用户nickName
+        socket.on('name change', (newName, cb) => {
+            let data = {
+                user: socket.nickName,
+                val: newName
+            }
+            User.upadateUserInfo('nickName', data, cb);
+        })
+
+        // 修改用户password
+        socket.on('pwd change', (newPwd, cb) => {
+            let data = {
+                user: socket.nickName,
+                val: newPwd
+            };
+            User.upadateUserInfo('pwd', data, cb);
+        })
+        // 退出，断开连接
         socket.on('disconnect', (reason) => {
             User.userLogout(socket);
         });

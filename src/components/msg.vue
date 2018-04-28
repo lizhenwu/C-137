@@ -18,11 +18,11 @@
             </li>
             </ul>
             </div>
-        <div class="input-box">
+        <div class="input-box device-width-box">
             <div class="input-wrapper">
             <i class="iconfont" title="发送文件todo">&#xe64d;</i>
-            <textarea ref="textarea" rows="1" type="text" v-model="msg" placeholder="#New Message" @keyup.enter="sendMsg(msg)"></textarea>
-            <i @click="sendMsg(msg)" class="iconfont btn-send" title="发送">&#xe60c;</i>
+            <textarea ref="textarea" rows="1"  type="text" v-model="msg" placeholder="#New Message" @keydown.enter="sendMsg(msg, $event)"></textarea>
+            <i @click="sendMsg(msg, $evnet)" class="iconfont btn-send" title="发送">&#xe60c;</i>
             </div>
         </div>
     </div>
@@ -88,8 +88,11 @@
             }
         },
         methods:{
-            sendMsg: function() {
-                let msg = {author: {nickName: this.user}, content: this.msg, time: Date.now()};
+            sendMsg: function(m, e) {
+                if(e) {
+                    e.preventDefault();
+                }
+                let msg = {author: {nickName: this.user}, content: m, time: Date.now()};
                 let msgWrap = {roomName: this.roomData.name, msg: msg};
                 this.msg = '';
                 this.socket.emit('new msg', msgWrap, info => {
@@ -168,12 +171,10 @@
 <style lang="less" scoped>
     .main{
         // height: 100%;
-        width: 60%;
         color: #737f8d;
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
-        flex-basis: 240px;
         background-color: #434140;
         .msg-wrapper{
             min-height: calc(100% - 100px);
@@ -203,6 +204,8 @@
                 margin: 0;
                 padding: 0;
                 .msg-list-item{
+                    max-width: 100%;
+                    overflow: hidden;
                     display: flex;
                     padding: 20px 0;
                     margin: 0px 5px 0px 15px; 
@@ -215,6 +218,8 @@
                         margin: 0 10px; 
                     }
                     .msg-item-body{
+                        flex: 1 1 auto;
+                        margin-right: 10px;
                         h3{
                             margin: 5px 0px;
                             font-size: 0.75rem;
@@ -229,19 +234,24 @@
                                 vertical-align: baseline;
                             }
                         }
+                        span{
+                            white-space: pre-wrap;
+                            word-break: break-all;
+                            word-wrap: break-word;
+                        }
                     }
                 }
             }
         }
         .input-box{
             min-height: 80px;
-            width: 100%;
             .input-wrapper{
-                max-width: 100%;
                 padding: 0px 15px;
                 border-radius: 6px;
                 margin: 15px auto;
                 min-height: 40px;
+                width: 70%;
+                max-width: 100%;
                 background-color: lighten(#434140, 10%);
                 display: flex;
                 align-items: center;
@@ -276,8 +286,6 @@
                 textarea{
                     line-height: 1.25rem;
                     height: auto;
-                    width: 25em;
-                    max-width: 100%;
                     font-size: 16px;
                     margin: 10px 10px 10px 30px;
                     flex: 1 1 auto;
@@ -286,6 +294,7 @@
                     outline: none;
                     color: hsla(0, 0, 100%, 0.7);
                     resize: none;
+                    white-space: pre-wrap;
                 }
                 button{
                     outline: none;
@@ -302,18 +311,9 @@
         border-radius: 50%;
         background-color: #00E676;
     }
-    .msg{
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-    }
-    .msg-box{
-        flex-grow: 1;
-        padding-top: 4px;
-    }
     .input-box{
         display: flex;
-        flex-shrink: 0
+        flex-shrink: 1
     }
     .sending{
         background: white
@@ -324,9 +324,12 @@
     .reverse .msg-item-body{
         text-align: right;
     }
-    @media screen and (max-width:500px){
-        .mdui-toolbar button{
-            transform: rotate(180deg)
+    @media screen and (max-width: 900px) {
+        .main .input-box{
+            width: 100%;
+        }
+        textarea{
+            width: 80%;
         }
     }
 </style>

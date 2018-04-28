@@ -1,5 +1,5 @@
 <template>
-<div class="members-wrap" id="right-drawer">
+<div class="members-wrap">
   <div class="members-group">
     <header>当前在线</header>
     <ul class="members-list">
@@ -14,7 +14,11 @@
   <div class="members-group">
     <header>历史在线</header>
     <ul class="members-list">
-
+        <li class="member-info" :key="item.nickName" v-for="item of previousUsers">
+        <div class="avatar" :style="{backgroundImage: `url(${item.avatar})`}">
+        </div>
+        <span class="member-id">{{item.nickName}}</span>
+      </li>
     </ul>
   </div>
     </div>
@@ -30,7 +34,8 @@
         }, 
         computed: {
             ...mapState([
-                'onlineUsers'
+                'onlineUsers',
+                'previousUsers'
             ])
         },
         methods: {
@@ -46,11 +51,12 @@
 </script>
 <style lang="less" scoped> 
     .members-wrap{
-        flex: 0 1 auto;
+        flex: 0 0 auto;  // 阻止flex缩放
         flex-basis: 240px;
         background-color: darken(#434140, 5%);
         overflow-x: hidden;
-        overflow-y: auto
+        overflow-y: auto;
+        transition: all .2s cubic-bezier(.08,.74,.37,.94);
     }
     .members-group{
         color: hsla(0, 0 , 100%, .7);
@@ -83,4 +89,12 @@
             }
         }
     }
+    @media screen and (max-width: 900px){
+        .members-wrap{
+            flex-basis: 0;
+        }
+    }
+</style>
+<style>
+    
 </style>

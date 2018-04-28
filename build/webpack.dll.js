@@ -16,13 +16,13 @@ module.exports = {
         // webpack打包用的是vue.runtime.esm.js
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production'),
+                NODE_ENV: JSON.stringify('development'),
                 DEBUG: false
             }
         }),
         // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn|en-gb/),
         new webpack.DllPlugin({
-            context: path.resolve(__dirname, "../"),
+            context: path.resolve(__dirname, '../'),
             path: path.resolve(__dirname, './[name]-manifest.json'),
             name: '[name]'
         }),

@@ -90,6 +90,7 @@ header{
             }
         }
         i{
+            font-size: 1.3em;
             user-select: none;
             margin: 0 5px;
             cursor: pointer;
@@ -98,6 +99,20 @@ header{
             }
         }
     }
+}
+@media screen and (max-width: 900px) {
+  .title span {
+    display: none;
+  }
+  header .bar-items {
+    input {
+      display: none;
+      &+i {
+        position: static;
+        color: inherit;
+      }
+    }
+  }
 }
 </style>
 

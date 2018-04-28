@@ -38,6 +38,7 @@ const router = new Router({
                         })
                         router.app.$store.commit('INIT_USER_DATA', response.data.userInfo);
                         router.app.$store.commit('UPDATE_ONLINEUSERS', response.data.currentUsers);
+                        router.app.$store.commit('INIT_PREV_USERS', response.data.previousUsers);
                         // 初始化socket操作挪到进入主界面路由时
                         router.app.$store.dispatch('socketInit');
                         next();

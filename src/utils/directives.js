@@ -86,8 +86,8 @@ export default {
                 clearTimeout(vm.timer);
                 vm.debounceClose();
             }; 
-            el.addEventListener('mouseover', handleMouseover);
-            el.addEventListener('mouseout', handleMouseout)
+            el.addEventListener('mouseenter', handleMouseover);
+            el.addEventListener('mouseleave', handleMouseout)
         }
     }
 }

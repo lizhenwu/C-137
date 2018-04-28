@@ -49,7 +49,7 @@ export default {
       states: states,
       y: 0,
       wrapperStyle: {
-        transform: `translate3d(0, -100%, 0)`
+        transform: `translate3d(0, -120%, 0)`
       }
     };
   },
@@ -103,6 +103,7 @@ export default {
         type: 'info',
         message: '已注销登录'
       })
+      this.$store.commit('RESET_STATE');
       this.$router.push({path: '/'});
     },
     enterRoom(roomName, index) {
@@ -211,7 +212,7 @@ export default {
       // height: 32px;
       line-height: 32px;
       opacity: 0.7;
-      transition: all .4s ease;
+      transition: all .3s ease;
       &.active{
         color: black;
       }
@@ -336,6 +337,11 @@ export default {
 .menu-enter-active {
   transform-origin: top right;
   transition: transform 0.35s cubic-bezier(0.43, 0.9, 0.75, 1.01);
+}
+@media screen and (max-width: 645px){
+  .side-bar{
+    width: 0;
+  }
 }
 </style>
 
