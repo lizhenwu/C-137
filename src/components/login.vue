@@ -50,7 +50,7 @@ export default {
           vm
           .$axios({
             method: "put",
-            url: `/api/user/:${this.userName}`,
+            url: `/api/user/${this.userName}`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
             },
@@ -63,7 +63,9 @@ export default {
             if (response.status == 200 && response.data == "user exist") {
               this.$message({type: 'info', message: "用户名已存在" });
             } else {
+              
               let nickName = response.data;
+              console.log(nickName)
               localStorage.token = response.headers.authorization;
               localStorage.user = response.data;
               vm.$router.push({ path: `/${nickName}` });
