@@ -8,6 +8,7 @@ import renderNotice from './components/Notification/index';
 import renderMessage from './components/Message/index';
 import timeFormat from './utils/timeFormat';
 import directives from './utils/directives';
+import plugins from './utils/plugins';
 
 Vue.use(Router);
 Vue.prototype.$axios = axios;
@@ -20,9 +21,13 @@ Vue.prototype.$timeFormat = timeFormat();
 
 // 注册自定义指令 
 Object.keys(directives).forEach(name => {
-  Vue.directive(name, directives[name])
+  Vue.directive(name, directives[name]);
 })
 
+// 插件
+Object.keys(plugins).forEach(name => {
+  Vue.use(plugins[name]);
+})
 
 var app = new Vue({
   el: '#app',
