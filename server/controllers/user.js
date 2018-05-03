@@ -162,4 +162,14 @@ module.exports = {
         }
         return cb(info);
     },
+
+    /**
+     * 搜索用户
+     * @param {string} name 
+     */
+    async search(name) {
+        let users = await User.find().regex('nickName', new RegExp(`^${name}`, 'i')).select('nickName avatar').exec();
+        return users;
+    }
+
 }

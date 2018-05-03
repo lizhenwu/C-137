@@ -104,5 +104,13 @@ module.exports = {
             return cb(history.msgs.reverse());
         }
         return cb({err: '哥, 这回真没有了'})
+    },
+    /**
+     * 根据name搜索群组
+     * @param {string} name 
+     */
+    async search(name) {
+        let rooms = await Room.find().regex('name', new RegExp(`^${name}`, 'i')).select('name').exec();
+        return rooms;
     }
 }

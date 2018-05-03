@@ -69,6 +69,20 @@ module.exports = function (io) {
             };
             User.upadateUserInfo('pwd', data, cb);
         })
+
+        socket.on('search', async (name, cb)  => {
+            // note: 这里的错误处理需要完善
+            try{
+                let [rooms, users] = await Promise.all([Room.search(name), User.search(name)]);
+                cb({
+                    rooms,
+                    users
+                })
+            }catch(err) {
+                cb({err: err.message});
+            }
+        })
+
         // 退出，断开连接
         socket.on('disconnect', (reason) => {
             User.userLogout(socket);
