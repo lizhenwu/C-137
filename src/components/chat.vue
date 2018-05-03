@@ -113,6 +113,7 @@
         margin-top: 15px;
         position: relative;
         .blur-container{
+            position: relative;
             display: flex;
             width: 100%;
             height: 100%;
@@ -136,6 +137,7 @@
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
+        width: 100%;
         .content{
             display: flex;
             flex: 1 1 auto; 
@@ -145,6 +147,8 @@
     .home{
         display: flex;
         position: relative;
+        width: 0;
+        overflow: hidden;
         background: #434140;
         color: hsla(0, 0, 100%, .9);;
         flex-grow: 1;

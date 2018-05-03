@@ -1,5 +1,5 @@
 // 生产环境用cdn字体资源，怎么通过webpack用环境变量选择引入本地文件还是cdn资源
-@import url('//at.alicdn.com/t/font_544491_ni7qvj2d5oh6w29.css');
+@import url('//at.alicdn.com/t/font_544491_jvh4iytqltqhbyb9.css');
 *{
   box-sizing: border-box
 }
@@ -29,6 +29,7 @@ html, body{
   box-sizing: border-box;
   background-color: @primal-bg;
   font-family: 'Nunito', sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 h1, h2, h3, h4, h5, h6, input, header, textarea, span{
   font-family: inherit;
@@ -40,6 +41,10 @@ h1, h2, h3, h4, h5, h6, input, header, textarea, span{
 }
 h3{
   font-weight: 400;
+}
+strong{
+  font-size: 12px; 
+  font-family: Arial, Helvetica, sans-serif
 }
 input{
   outline: none;
@@ -55,6 +60,9 @@ input{
     border-bottom: 1px solid rgba(255, 255, 255, .8);
   }
 }
+input {  
+  background-color:transparent;  
+}  
 button{
   cursor: pointer;
   &:disabled{
@@ -133,7 +141,79 @@ ul{
     opacity: 1 !important;
   }
 }
+.avatar-s{
+  height: 20px;
+  width: 20px;
+  margin: 0 5px;
+}
 .collapse{
   flex-basis: 0 !important;
+  flex-shrink: 1;
+  min-width: 0;
   transition: all .5s cubic-bezier(.08,.74,.37,.94);
+}
+.ellipsis-box{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jiantou-right {
+  transform: rotate(-90deg);
+}
+.jiantou-left {
+  transform: rotate(90deg);
+}
+.side-bar{
+  flex-basis: 240px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.members-group{
+  color: hsla(0, 0 , 100%, .7);
+  ul{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      li:hover{
+          transition: all .3s ease;
+          background-color: darken(#434140, 7%)
+      }
+      .member-info{
+          cursor: pointer;
+          display: flex;
+          align-items: center
+      }
+      .avatar{
+          i{
+              padding: 5px;
+          }
+      }
+      .member-id{
+          vertical-align: baseline
+      }
+  }
+}
+
+@media screen and (max-width: 645px){
+  .show-in-s{
+    display: initial !important;
+  }
+  .side-bar{
+    flex-basis: 0 !important;
+    flex-shrink: 1;
+    min-width: 0;
+    // transition: all .5s cubic-bezier(.08,.74,.37,.94);
+  }
+  .sideBar-collapse{
+    min-width: 240px;
+    transition: all .3s cubic-bezier(.08,.74,.37,.94);
+  }
+  .sideBar-collapse+.main-container{
+    flex-shrink: 0 !important;
+  }
+}
+@media screen and (max-width: 645px) {
+  *::-webkit-scrollbar{
+    width: 5px;
+  }
 }

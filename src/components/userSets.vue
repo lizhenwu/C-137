@@ -12,7 +12,7 @@
       </div>
       <span>密码</span>
       <div class="input-wrapper"> 
-      <input type="password" v-model="password">
+      <input v-model="password" autocomplete="off">
       <i class="iconfont icon-xuanzhong" title="确认修改" @click.stop="changeUserInfo(password, 'pwd', $event)"></i>
       </div>
     </div>
@@ -147,6 +147,7 @@ export default {
     .img-input {
       position: relative;
       border-radius: 50%;
+      flex-shrink: 0;
       width: 100px;
       height: 100px;
       background-size: cover;
@@ -179,10 +180,11 @@ export default {
         position: absolute;
         cursor: pointer;
         display: inline;
+        color: rgba(255, 255, 255, .4);
       }
       input{
         &:focus + i{
-          display: inline;
+          color: rgba(255, 255, 255, .8);
         }
       }
       .input-wrapper{
@@ -192,4 +194,13 @@ export default {
       }
     }
   }
+
+@media screen  and (max-width: 645px){
+  .flex-container{
+    flex-direction: column;
+    .img-input{
+      margin-bottom: 1em;
+    }
+  }
+}
 </style>

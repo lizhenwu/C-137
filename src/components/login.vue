@@ -1,14 +1,14 @@
 <template>
     <section class="login-box">
-        <h2>Hello, {{userName || 'bro'}}</h2>
+        <h2 class="ellipsis-box">Hello, {{userName || 'bro'}}</h2>
         <div class="input-group">
             <label class="label"><i class="iconfont icon-mine"></i></label>
-            <input class="input-box" type="text" placeholder="用户名" @blur.stop="showTip" v-model="userName" />
+            <input autocomplete="off" class="input-box" type="text" placeholder="用户名" @blur.stop="showTip" v-model="userName" />
             <span>username is required</span>
         </div>
         <div class="input-group">
             <label class="label"><i class="iconfont icon-lock"></i></label>
-            <input class="input-box" type="password" placeholder="密 码" @keydown.enter.stop="login" @blur.stop="showTip" v-model="passWord" />
+            <input autocomplete="off" class="input-box" type="password" placeholder="密 码" @keydown.enter.stop="login" @blur.stop="showTip" v-model="passWord" />
             <span>password is required</span>
         </div>
         <div class="btn">
@@ -31,10 +31,11 @@ export default {
       let vm = this;
       if (this.userName && this.passWord) {
         if(validate(this.userName, this.passWord, vm)) {
+          console.log('验证通过')
           vm
           .$axios({
             method: "put",
-            url: `/api/user/:${this.userName}`,
+            url: `/api/user/${this.userName}`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
             },
@@ -45,7 +46,7 @@ export default {
           })
           .then(function(response) {
             if (response.status == 200 && response.data == "user exist") {
-              this.$message({type: 'info', message: "用户名已存在" });
+              vm.$message({type: 'info', message: "用户名已存在" });
             } else {
               let nickName = response.data;
               localStorage.token = response.headers.authorization;
@@ -54,11 +55,11 @@ export default {
             }
           })
           .catch(function(err) {
-            this.$message({type: 'error', message: err.response.data})
+            vm.$message({type: 'error', message: err.response.data})
           });
         }
       } else {
-        this.$message({type: 'info', message: '请输入用户名和密码'})
+        vm.$message({type: 'info', message: '请输入用户名和密码'})
       }
     },
     login: function() {

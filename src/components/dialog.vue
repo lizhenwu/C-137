@@ -13,8 +13,8 @@ export default {
 .dialog{
     display: flex;
     flex-direction: column;
-    // min-width: 400px;
-    // min-height: 300px;
+    min-width: 360px;
+    min-height: 300px;
     width: 40%;
     height: 50%;
     position: absolute;
@@ -30,6 +30,7 @@ export default {
     box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, .4);
     header{
         display: flex;
+        flex-shrink: 0;
         justify-content: flex-end;
         padding: 10px 20px;
         span{
@@ -55,6 +56,13 @@ export default {
                 transition: all .2s ease;
             }
         }
+    }
+}
+@media screen and (max-width: 645px){
+    .dialog{
+        width: 100%;
+        height: 60%;
+        min-height: 400px;
     }
 }
 </style>

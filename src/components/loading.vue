@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  
+
 }
 </script>
 <style lang="less" scoped>
@@ -15,6 +15,7 @@ export default {
   height: 32px;
   position: relative;
   align-self: center;
+  margin: 0 auto;
   .cube1, .cube2{
     background-color: #737f8d;
     width: 15px;
@@ -31,13 +32,17 @@ export default {
 @keyframes cubemove{
   25% {
     transform: translateX(42px) rotate(-90deg) scale(0.5);
-  } 50% {
+  } 
+  50% {
     transform: translateX(42px) translateY(42px) rotate(-179deg);
-  } 50.1% {
+  } 
+  50.1% {
     transform: translateX(42px) translateY(42px) rotate(-180deg);
-  } 75% {
+  } 
+  75% {
     transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-  } 100% {
+  } 
+  100% {
     transform: rotate(-360deg);
   }
 }

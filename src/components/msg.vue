@@ -173,42 +173,27 @@
         // height: 100%;
         color: #737f8d;
         flex: 1 1 auto;
+        width: 0;        // 小屏时可以促成 打开成员列表时隐藏消息框的效果
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         background-color: #434140;
         .msg-wrapper{
-            min-height: calc(100% - 100px);
+            // min-height: calc(~"100% - 100px");
             flex: 1 1 auto;
             overflow-x: hidden;
             overflow-y: auto;
-            &::-webkit-scrollbar{
-                // background-color: darken(#434140, 5%);
-                width: 12px;
-            }
-            &::-webkit-scrollbar-thumb{
-                background-color: darken(#434140, 8%);
-                border: 2px solid #434140;
-                border-radius: 3px;
-                &:hover{
-                    width: 12px;
-                }
-            }
-            &::-webkit-scrollbar-track{
-                background-color: darken(#434140, 5%);
-                border: 2px solid #434140;
-                border-radius: 5px;
-            }
             .msg-list{
                 list-style: none;
                 user-select: text;
+                min-width: 350px;  // 
                 margin: 0;
                 padding: 0;
                 .msg-list-item{
-                    max-width: 100%;
+                    width: 100%;
                     overflow: hidden;
                     display: flex;
-                    padding: 20px 0;
-                    margin: 0px 5px 0px 15px; 
+                    padding: 20px 10px;
                     border-bottom: 1px solid hsla(0, 0, 100%, .07);
                     .avatar{
                         background-size: cover;
@@ -280,10 +265,10 @@
                             right: -10px;
                             top: 0;
                             background: lighten(#434140, 30%);
-                            z-index: 100;
                         }
                     }
                 textarea{
+                    max-height: 80px;
                     line-height: 1.25rem;
                     height: auto;
                     font-size: 16px;
@@ -295,6 +280,9 @@
                     color: hsla(0, 0, 100%, 0.7);
                     resize: none;
                     white-space: pre-wrap;
+                    &::-webkit-scrollbar{
+                        width: 0;
+                    }
                 }
                 button{
                     outline: none;
@@ -313,7 +301,7 @@
     }
     .input-box{
         display: flex;
-        flex-shrink: 1
+        flex-shrink: 0
     }
     .sending{
         background: white
