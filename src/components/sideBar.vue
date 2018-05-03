@@ -1,8 +1,8 @@
 <template>
-  <div class="side-bar">
+  <div class="side-bar" :class="siderBarCollapsed ? 'sideBar-collapse' : ''">
             <header class="header" @click.stop="showMenu">
                 <span>C-137</span>
-                <i class="iconfont icon-jiantouxia" v-toolTip:right="'菜单'"></i>
+                <i class="iconfont icon-menu" v-toolTip:right="'菜单'"></i>
             </header>
             <transition name="menu">
             <div class="menu" v-if="isMenuShow">
@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["socket", "user", "avatar", "rooms", "insideRoom", 'currentState']),
+    ...mapState(["socket", "user", "avatar", "rooms", "insideRoom", 'currentState', 'siderBarCollapsed']),
     ...mapGetters(["roomData"]),
   },
   watch: {
@@ -147,7 +147,6 @@ export default {
 <style lang="less" scoped>
 .side-bar {
   height: 100%;
-  min-width: 240px;
   position: relative;
   background-color: darken(#434140, 10%);
   color: #f6f6f7;
@@ -338,10 +337,12 @@ export default {
   transform-origin: top right;
   transition: transform 0.35s cubic-bezier(0.43, 0.9, 0.75, 1.01);
 }
+.showSideBar{
+  display: flex;
+
+}
 @media screen and (max-width: 645px){
-  .side-bar{
-    width: 0;
-  }
+
 }
 </style>
 
