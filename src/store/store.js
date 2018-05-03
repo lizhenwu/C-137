@@ -22,6 +22,7 @@ const CHANGE_STATE = 'CHANGE_STATE';
 const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
 const INIT_PREV_USERS = 'INIT_PREV_USERS';
 const RESET_STATE = 'RESET_STATE';
+const TOGGLE_SIDE_BAR = 'TOGGLE_SIDE_BAR';
 const domain = process.env.NODE_ENV === 'production' ? location.origin : 'http://localhost:8080';
 
 const store = new Vuex.Store({
@@ -112,6 +113,9 @@ const store = new Vuex.Store({
         },
         [STOP_LOADING](state) {
             state.loadingPosition = '';
+        },
+        [TOGGLE_SIDE_BAR](state){
+            state.siderBarCollapsed = !state.siderBarCollapsed;
         },
         [ADD_NEW_MSG](state, data) {
             let msgArr = Array.isArray(data.msg) ? data.msg : [data.msg],
