@@ -3,13 +3,13 @@
     <ul>
       <li class="normal-flex-box">
         <span>群组名称</span>
-        <input type="text" placeholder="#room name" maxlength="10" v-model="roomName"/>
+        <input type="text" placeholder="#room name" v-model="roomName"/>
       </li>
       <li class="normal-flex-box">
         <span>群组notice</span>
-        <input type="text" placeholder="#room notice" maxlength="30" v-model="roomNotice"/>
+        <input type="text" placeholder="#room notice" v-model="roomNotice"/>
       </li>
-      <setting-item ref="checkbox" title="公共/私有" :isChecked="isChecked" id="roomAuth"></setting-item>
+      <setting-item ref="checkbox" title="私有/公共" :isChecked="isChecked" id="roomAuth"></setting-item>
     </ul>
     <button :disabled="roomName === ''" @click="createRoom">确 认</button>
   </div>
@@ -33,6 +33,18 @@ export default {
   methods: {
     createRoom: function(e) {
       let isPublic = this.$refs.checkbox.$refs.checkbox.checked;
+      if(this.roomName.length > 20) {
+        return this.$message({
+          type: 'info',
+          message: '名称不能超过20个字符'
+        })
+      }
+      if(this.roomNotice.length > 30) {
+        return this.$message({
+          type: 'info',
+          message: '公告不能超过30个字符'
+        })
+      }
       
       const roomInfo = {
         roomName: this.roomName,
