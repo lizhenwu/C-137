@@ -31,9 +31,10 @@ html, body{
   font-family: 'Nunito', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
-h1, h2, h3, h4, h5, h6, input, header, textarea, span{
+h1, h2, h3, h4, h5, h6, input, header, textarea, span, li{
   font-family: inherit;
   white-space: nowrap;
+  text-overflow: ellipsis;
   &::-webkit-input-placeholder{
     font-family: inherit;
     color: hsla(0, 0, 100%, .4);
@@ -69,6 +70,10 @@ button{
     cursor: not-allowed;
     opacity: .5;
   }
+}
+button, html [type="button"]{
+  -webkit-appearance: button;
+  touch-action: manipulation; 
 }
 ul{
   list-style: none;
