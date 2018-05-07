@@ -90,7 +90,7 @@ header{
     display: flex;
     position: relative;
     flex-shrink: 0;
-    width: 100%;
+    // width: 100%;
     padding: 10px 10px;
     justify-content: space-between;
     background-color: #434140;
@@ -107,6 +107,7 @@ header{
     }
     .title{
         display: flex;
+        overflow: hidden;
         align-items: center;
         .iconfont{
             margin: 0 10px;
@@ -117,6 +118,7 @@ header{
             color: hsla(0, 0, 100%, .9);
             margin: 0 10px;
             line-height: 40px;
+            overflow: hidden;
         }
         span{
             font-size: 14px;

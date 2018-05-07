@@ -211,6 +211,7 @@ export default {
       // height: 32px;
       line-height: 32px;
       opacity: 0.7;
+      overflow: hidden;
       transition: all .3s ease;
       &.active{
         color: black;

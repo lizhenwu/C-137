@@ -134,10 +134,10 @@
         transition: all .2s cubic-bezier(.43,.9,.75,1.01);
     }
     .main-container{
+        max-width: calc(~"100% - 240px");
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
-        width: 100%;
         .content{
             display: flex;
             flex: 1 1 auto; 
@@ -174,6 +174,11 @@
             margin: 0;
             height: 100%;
             width: 100%;
+        }
+    }
+    @media screen and (max-width: 645px) {
+        .main-container{
+           max-width: 100vw;
         }
     }
     @keyframes goblur{
