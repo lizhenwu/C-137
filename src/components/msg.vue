@@ -307,10 +307,12 @@
         background: white
     }
     .reverse{
-        flex-direction:row-reverse;
+        flex-direction: row-reverse;
     }
     .reverse .msg-item-body{
-        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
     @media screen and (max-width: 900px) {
         .main .input-box{
