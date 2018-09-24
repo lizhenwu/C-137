@@ -119,7 +119,7 @@
             timeFormat(timestamp) {
                 return this.$timeFormat(timestamp, true)
             },
-            loadHistory() {
+            loadHistory(heightBefore) {
                 let lastOne = this.currentMsgArr[0],
                     timestamp = lastOne ? lastOne.time : Date.now(),
                     roomName = this.roomData.name;
@@ -135,14 +135,21 @@
                             message: data.err
                         })
                     }
-                    this.addMsg({roomName: roomName, msg: data})
+                    this.addMsg({roomName: roomName, msg: data});
+                    this.$nextTick(() => {
+                        let heightNow = this.$refs.msgWrapper.scrollHeight;
+                        this.$refs.msgWrapper.scrollTop = heightNow - heightBefore;
+                    })
                 })
             },
             handleScroll() {
                 let msgWrapper = this.$refs.msgWrapper;
                 if(msgWrapper.scrollTop === 0 && !this.loading) {
                     this.loading = true;
-                    this.loadHistory();
+                    // 当前聊天框高度
+                    let h = msgWrapper.scrollHeight;
+
+                    this.loadHistory(h);
                 }
             },
             ...mapMutations({
